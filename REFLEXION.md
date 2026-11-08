@@ -6,12 +6,14 @@ Se publicó únicamente la base `bc9898b` con autorización explícita. Las mejo
 [PR de fuente #2](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/2)
 (`feat/firebase-cicd` → `main`, `3f6b763fa7d92d94823bd2be41fded8cc8825fe3`) y
 [PR de evidencia #3](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/3)
-(`docs/firebase-b1-evidence` → `feat/firebase-cicd`,
-`5404476eae8beb1b97838d754a5dbbf0ba754b0f`); ambos abiertos, sin merge.
-Los previews de los commits indicados pasaron CI y comprobaciones HTTP de headers, caché
-e identidad (runs 42503835084 y 42503853409). Esto no acredita interacción en navegador;
-el cierre documental posterior tendrá su propio CI. Publicación del hardening,
-B5 y rollback no están autorizados.
+(`docs/firebase-b1-evidence` → `feat/firebase-cicd`, cierre `b6639e2`);
+ambos abiertos, sin merge. Los previews anteriores pasaron CI y comprobaciones HTTP de
+headers, caché e identidad (runs 42503835084 y 42503853409). El cierre `b6639e2`
+pasó CI (run 42505029051), pero su última consulta HTTP automática falló por conexión.
+Las [capturas manuales de versión](docs/evidence/manual-version-verification.md) muestran
+`b6639e2`/`docs/firebase-b1-evidence` en el preview de `/cursos` y
+`bc9898b`/`baseline` en producción. No acreditan interacción en navegador ni éxito
+HTTP automático. Publicación del hardening, B5 y rollback no están autorizados.
 
 ## 1. ¿Por qué vence el preview?
 
@@ -142,6 +144,7 @@ Evidencias conservadas:
   Mediciones, `stdout`, `exitCode`, marcas temporales y demás campos no cambiaron.
 - [Respuesta automática histórica de SecurityHeaders: HTTP 403 sin calificación](docs/evidence/b1-securityheaders.json).
 - [Reporte manual de SecurityHeaders: D y captura](docs/evidence/b1-securityheaders-manual.md).
+- [Capturas manuales de versión: preview de cierre y base en producción](docs/evidence/manual-version-verification.md).
 
 ### Pendiente en las cuentas de la usuaria
 
@@ -155,11 +158,14 @@ Evidencias conservadas:
   `feat/firebase-cicd` → `main` (`3f6b763fa7d92d94823bd2be41fded8cc8825fe3`,
   342 líneas) y [PR #3 de evidencia](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/3)
   `docs/firebase-b1-evidence` → `feat/firebase-cicd`
-  (`5404476eae8beb1b97838d754a5dbbf0ba754b0f`, 388 líneas). Ambos enlazan sin cerrar
+  (commit documental anterior `5404476`, cierre comprobado `b6639e2`). Ambos enlazan sin cerrar
   la [issue aprobada #1](https://github.com/micaelahryhorezuk/practica-firebase-cicd/issues/1),
   todavía abierta. El commit de evidencia contiene la documentación de T6–T8b.
-- [x] CI de los SHA indicados: fuente SUCCESS (run 42503835084) y evidencia SUCCESS
-  (run 42503853409). La actualización documental posterior requiere su propio CI.
+- [x] CI de fuente SUCCESS (run 42503835084), evidencia anterior SUCCESS
+  (run 42503853409) y cierre `b6639e2` SUCCESS (run 42505029051).
+- [x] Identidad manual del cierre: las [capturas de `/cursos`](docs/evidence/manual-version-verification.md)
+  muestran `b6639e2` en preview de evidencia y `bc9898b` en producción. La última
+  consulta HTTP automática falló por conexión; no se presenta como éxito.
 - [x] Comentarios del bot y URLs de preview verificados:
   [fuente](https://practica-cicd-micela--pr2-feat-firebase-cicd-zjdzsiyo.web.app) y
   [evidencia](https://practica-cicd-micela--pr3-docs-firebase-b1-evi-eftmpc87.web.app).

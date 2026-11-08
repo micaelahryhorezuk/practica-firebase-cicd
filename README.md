@@ -34,8 +34,8 @@ Estado verificado tras la vinculación y el despliegue inicial:
 - Entrega en dos PR abiertos y no draft, sin merge: [fuente #2](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/2)
   `feat/firebase-cicd` → `main` (commit `3f6b763fa7d92d94823bd2be41fded8cc8825fe3`,
   342 líneas) y [evidencia B1 #3](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/3)
-  `docs/firebase-b1-evidence` → `feat/firebase-cicd` (commit
-  `5404476eae8beb1b97838d754a5dbbf0ba754b0f`, 388 líneas). Ambos referencian sin cerrar
+  `docs/firebase-b1-evidence` → `feat/firebase-cicd` (cierre comprobado en
+  `b6639e2`; el commit documental anterior fue `5404476`). Ambos referencian sin cerrar
   la [issue aprobada #1](https://github.com/micaelahryhorezuk/practica-firebase-cicd/issues/1),
   aún abierta. El commit de evidencia conserva los resultados documentales de T6–T8b.
   En el SHA de fuente, `build_and_preview` y `Deploy Preview` terminaron SUCCESS (run
@@ -44,7 +44,11 @@ Estado verificado tras la vinculación y el despliegue inicial:
   controles de headers y caché (exit 0). Esto no acredita interacción en navegador.
   El [preview de evidencia](https://practica-cicd-micela--pr3-docs-firebase-b1-evi-eftmpc87.web.app)
   también pasó CI y los controles HTTP de headers, caché y metadatos para `5404476`
-  (run 42503853409). El cierre documental posterior tendrá su propia comprobación de CI.
+  (run 42503853409). El cierre `b6639e2` pasó CI (run 42505029051); la última consulta
+  HTTP automática falló por conexión (`ETIMEDOUT`/`ENETUNREACH`), sin confirmar identidad.
+  Las [capturas manuales de versión](docs/evidence/manual-version-verification.md) muestran
+  en `/cursos` el preview `b6639e2`/`docs/firebase-b1-evidence` y producción
+  `bc9898b`/`baseline`. No son un éxito HTTP automático ni verifican interacción.
   La interacción en navegador sigue pendiente; merge, publicación del hardening, B5 y
   rollback no están autorizados.
 
