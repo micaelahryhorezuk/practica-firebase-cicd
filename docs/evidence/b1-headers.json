@@ -1,0 +1,106 @@
+{
+  "measuredAt": "2026-11-07T20:38:02.457Z",
+  "measurementComplete": false,
+  "failureKind": "network_error",
+  "collectorExitCode": 0,
+  "baseCommit": "bc9898bb9a8320c6920bcba9e026a0732d70f9ff",
+  "sourceNote": "Base sin hardening; único ajuste de despliegue: hosting.site=practica-cicd-micela.",
+  "publicIdentity": {
+    "status": 200,
+    "commit": "bc9898b",
+    "branch": "baseline",
+    "htmlMatchesLocalExport": true,
+    "headers": {
+      "accept-ranges": "bytes",
+      "alt-svc": "h3=\":443\";ma=86400,h3-29=\":443\";ma=86400,h3-27=\":443\";ma=86400",
+      "cache-control": "max-age=3600",
+      "connection": "keep-alive",
+      "content-encoding": "br",
+      "content-length": "1819",
+      "content-type": "text/html; charset=utf-8",
+      "date": "Sat, 07 Nov 2026 20:38:02 GMT",
+      "etag": "\"5e3b8136399ff610c79691e714f281bfef9c3c9c0e3a2a32df4725ada09cbd43-br\"",
+      "last-modified": "Sat, 07 Nov 2026 20:37:17 GMT",
+      "strict-transport-security": "max-age=31556926; includeSubDomains; preload",
+      "vary": "x-fh-requested-host, accept-encoding",
+      "x-cache": "MISS",
+      "x-cache-hits": "0",
+      "x-served-by": "cache-eze2230062-EZE",
+      "x-timer": "S1794083882.476616,VS0,VE176"
+    }
+  },
+  "routes": [
+    {
+      "path": "/cursos",
+      "status": 200,
+      "headers": {
+        "accept-ranges": "bytes",
+        "alt-svc": "h3=\":443\";ma=86400,h3-29=\":443\";ma=86400,h3-27=\":443\";ma=86400",
+        "cache-control": "max-age=3600",
+        "connection": "keep-alive",
+        "content-encoding": "br",
+        "content-length": "2390",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Sat, 07 Nov 2026 20:38:02 GMT",
+        "etag": "\"ba1c48457b15a8850d6b73cd5f2696312002771635dc076e32636eecfa4a6ffc-br\"",
+        "last-modified": "Sat, 07 Nov 2026 20:37:17 GMT",
+        "strict-transport-security": "max-age=31556926; includeSubDomains; preload",
+        "vary": "x-fh-requested-host, accept-encoding",
+        "x-cache": "MISS",
+        "x-cache-hits": "0",
+        "x-served-by": "cache-eze2230062-EZE",
+        "x-timer": "S1794083883.674875,VS0,VE204"
+      }
+    },
+    {
+      "path": "/b1-nonexistent-route",
+      "status": 404,
+      "headers": {
+        "accept-ranges": "bytes",
+        "alt-svc": "h3=\":443\";ma=86400,h3-29=\":443\";ma=86400,h3-27=\":443\";ma=86400",
+        "cache-control": "max-age=3600",
+        "connection": "keep-alive",
+        "content-encoding": "gzip",
+        "content-length": "1861",
+        "content-type": "text/html; charset=utf-8",
+        "date": "Sat, 07 Nov 2026 20:38:03 GMT",
+        "etag": "\"fd09dff1980e1ae9937bed7b3edab139cf3f09467dc49305491a197114a25ae5\"",
+        "last-modified": "Sat, 07 Nov 2026 20:37:17 GMT",
+        "strict-transport-security": "max-age=31556926; includeSubDomains; preload",
+        "vary": "x-fh-requested-host, accept-encoding",
+        "x-cache": "MISS",
+        "x-cache-hits": "0",
+        "x-served-by": "cache-eze2230068-EZE",
+        "x-timer": "S1794083883.979069,VS0,VE373"
+      }
+    },
+    {
+      "path": "/_next/static/chunks/1x6obpmlu1_c2.js",
+      "status": 200,
+      "headers": {
+        "accept-ranges": "bytes",
+        "alt-svc": "h3=\":443\";ma=86400,h3-29=\":443\";ma=86400,h3-27=\":443\";ma=86400",
+        "cache-control": "max-age=3600",
+        "connection": "keep-alive",
+        "content-encoding": "br",
+        "content-length": "1663",
+        "content-type": "text/javascript; charset=utf-8",
+        "date": "Sat, 07 Nov 2026 20:38:03 GMT",
+        "etag": "\"cac645c065f4c0e6c0e826f6fa3c3087d2e9bb9748c9f001925a13722e811e29-br\"",
+        "last-modified": "Sat, 07 Nov 2026 20:37:17 GMT",
+        "strict-transport-security": "max-age=31556926; includeSubDomains; preload",
+        "vary": "x-fh-requested-host, accept-encoding",
+        "x-cache": "MISS",
+        "x-cache-hits": "0",
+        "x-served-by": "cache-eze2230043-EZE",
+        "x-timer": "S1794083883.980268,VS0,VE205"
+      }
+    }
+  ],
+  "command": "node scripts/check-headers.mjs https://practica-cicd-micela.web.app",
+  "exitCode": 1,
+  "signal": null,
+  "stdout": "\n▶ HTML: https://practica-cicd-micela.web.app/\n",
+  "stderr": "node:internal/deps/undici/undici:13510\n      Error.captureStackTrace(err);\n            ^\n\nTypeError: fetch failed\n    at node:internal/deps/undici/undici:13510:13\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async headersDe (file://<PROJECT_ROOT>/scripts/check-headers.mjs:34:15)\n    at async file://<PROJECT_ROOT>/scripts/check-headers.mjs:41:14 {\n  [cause]: AggregateError [ETIMEDOUT]: \n      at internalConnectMultiple (node:net:1134:18)\n      at internalConnectMultiple (node:net:1210:5)\n      at Timeout.internalConnectMultipleTimeout (node:net:1742:5)\n      at listOnTimeout (node:internal/timers:590:11)\n      at process.processTimers (node:internal/timers:523:7) {\n    code: 'ETIMEDOUT',\n    [errors]: [\n      Error: connect ETIMEDOUT 199.36.158.100:443\n          at createConnectionError (node:net:1678:14)\n          at Timeout.internalConnectMultipleTimeout (node:net:1737:38)\n          at listOnTimeout (node:internal/timers:590:11)\n          at process.processTimers (node:internal/timers:523:7) {\n        errno: -110,\n        code: 'ETIMEDOUT',\n        syscall: 'connect',\n        address: '199.36.158.100',\n        port: 443\n      },\n      Error: connect ENETUNREACH 2620:0:890::100:443 - Local (:::0)\n          at internalConnectMultiple (node:net:1206:16)\n          at Timeout.internalConnectMultipleTimeout (node:net:1742:5)\n          at listOnTimeout (node:internal/timers:590:11)\n          at process.processTimers (node:internal/timers:523:7) {\n        errno: -101,\n        code: 'ENETUNREACH',\n        syscall: 'connect',\n        address: '2620:0:890::100',\n        port: 443\n      }\n    ]\n  }\n}\n\nNode.js v22.19.0\n",
+  "error": null
+}
