@@ -17,18 +17,31 @@ Proyecto configurado: **`practica-cicd-micela`**. Los workflows ya implementan A
 los comentarios A4 y A5 son extras opcionales que todavía no se implementaron.
 El preview compila el SHA de la rama del PR; los PR de forks se omiten para no usar secretos.
 
-Antes de publicar, desde la carpeta de este repositorio:
+Estado verificado tras la vinculación y el despliegue inicial:
 
-1. Ejecutar `npx firebase login` en una terminal propia.
-2. Ejecutar `npx firebase init hosting:github`, elegir
-   `micaelahryhorezuk/practica-firebase-cicd` y **no sobrescribir los workflows**.
-3. Confirmar en GitHub → Settings → Secrets and variables → Actions el nombre del secreto.
-   Ambos workflows prevén `FIREBASE_SERVICE_ACCOUNT_PRACTICA_CICD_MICELA`, pero **su
-   existencia y nombre todavía no están verificados**. Si el asistente crea otro nombre,
-   reemplazar la referencia en ambos YAML y ajustar `tests/pipeline.test.mjs`.
-   No copiar el valor del secreto a archivos, capturas ni conversaciones.
-4. Antes de push, revisar los cambios que haya hecho el asistente. Push, PR, merge y deploy
-   requieren un paso posterior: esta preparación no ejecuta esas operaciones.
+- Login y `firebase init hosting:github` completados por la usuaria sin sobrescribir workflows.
+- GitHub confirmó el secreto `FIREBASE_SERVICE_ACCOUNT_PRACTICA_CICD_MICELA`, coincidente
+  con ambos workflows. Solo se consultaron nombre y fecha, nunca su valor.
+- Con autorización explícita, se publicó la **base sin hardening** `bc9898b` en
+  <https://practica-cicd-micela.web.app>, desde una copia aislada. La rama actual conserva
+  las mejoras de seguridad y todavía no se publicó.
+- La [salida manual del script B1](docs/evidence/b1-manual-output.md) ya fue aportada en una
+  captura sobre la base sin hardening. La [medición automática anterior](docs/evidence/b1-headers.json)
+  falló por conexión; se conserva como antecedente, no como bloqueo actual del script.
+- **B1 completa por evidencia manual:** el [reporte de SecurityHeaders y su captura](docs/evidence/b1-securityheaders-manual.md)
+  muestran calificación **D** para la base sin hardening. El intento automático anterior
+  devolvió HTTP 403 y permanece registrado como fallo histórico, no como escaneo exitoso.
+  El push de fuente y los PR de preview ahora están autorizados, pero **no ejecutados**;
+  merge, publicación del hardening y rollback no están autorizados.
+- Entrega seleccionada: cadena hacia `main` en dos PR sin merge. Primero fuente
+  `feat/firebase-cicd` → `main` (commit `3f6b763fa7d92d94823bd2be41fded8cc8825fe3`);
+  después evidencia B1 `docs/firebase-b1-evidence` → `feat/firebase-cicd`, cuando se confirme
+  su commit. Issue aprobada [#1](https://github.com/micaelahryhorezuk/practica-firebase-cicd/issues/1),
+  referencia no cerrante `Refs #1`. Todavía no hay preview ni verificación de navegador.
+
+Detalle del despliegue y su corrección de destino:
+[docs/evidence/baseline-deployment.md](docs/evidence/baseline-deployment.md).
+No copiar valores de secretos a archivos, capturas ni conversaciones.
 
 Checks locales: `node --test tests/*.test.mjs`, `npm run typecheck` y `npm run build`.
 Para verificar HTTP sin usar un proyecto real:

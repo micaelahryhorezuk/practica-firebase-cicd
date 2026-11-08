@@ -1,8 +1,10 @@
 # Reflexión · CI/CD con Firebase Hosting
 
 Repositorio: https://github.com/micaelahryhorezuk/practica-firebase-cicd
-Producción prevista: https://practica-cicd-micela.web.app (**no verificada**).
-Esta es una preparación local: no se ejecutaron push, PR, deploy ni rollback.
+Producción: https://practica-cicd-micela.web.app (**base sin hardening verificada por HTTP**).
+Se publicó únicamente la base `bc9898b` con autorización explícita. Las mejoras de esta rama
+siguen locales: push y PR de preview ya autorizados, pero aún no ejecutados; sin merge,
+publicación del hardening ni rollback autorizados.
 
 ## 1. ¿Por qué vence el preview?
 
@@ -25,7 +27,9 @@ con sus permisos, por ejemplo desplegar contenido malicioso. Debe estar únicame
 secreto de GitHub, con permisos mínimos de despliegue, acceso restringido y rotación ante
 exposición. No basta con borrar una clave del último commit: debe revocarse.
 El workflow omite PR de forks y no usa `pull_request_target` para ejecutar su código con secretos.
-El nombre previsto del secreto debe confirmarse después de `firebase init hosting:github`.
+Después de `firebase init hosting:github`, GitHub confirmó el secreto
+`FIREBASE_SERVICE_ACCOUNT_PRACTICA_CICD_MICELA`, coincidente con ambos workflows.
+Solo se consultaron el nombre y la fecha de actualización, nunca el valor.
 
 ## 4. CSP y funcionamiento
 
@@ -93,12 +97,57 @@ como si fuera un asset público.
   build y suite 8/8 en una copia aislada, y validó semánticamente ambos YAML. No encontró
   bloqueos. No ejecutó operaciones remotas ni pruebas de navegador.
 
+### Producción inicial: B1 completa con evidencias manuales
+
+Medición UTC: `2026-11-07T20:38:02.457Z`. Base publicada:
+`bc9898bb9a8320c6920bcba9e026a0732d70f9ff`, con etiqueta de build `baseline`.
+El HTML de `/` coincide exactamente con el export local; `/` y `/cursos` respondieron 200,
+una ruta inexistente 404 y un asset JavaScript 200.
+
+Los headers HTTP capturados muestran:
+
+- HSTS agregado por Firebase: `max-age=31556926; includeSubDomains; preload`.
+- Ausentes: CSP, X-Content-Type-Options, X-Frame-Options, Referrer-Policy y Permissions-Policy.
+- `Cache-Control: max-age=3600` tanto en HTML como en el asset inspeccionado, sin `immutable`.
+
+La [captura manual de la salida completa del script B1](docs/evidence/b1-manual-output.md)
+ya muestra `/` con status 200, los headers iniciales, el caché del HTML y del asset, y
+`❌ 6 control(es) pendiente(s).` Son controles esperables en la base antes del hardening,
+no una regresión de build o tests. La captura no muestra el código de salida del proceso.
+
+El intento **automático anterior**, conservado por separado, terminó con exit 1 por
+`TypeError: fetch failed` (`ETIMEDOUT`/`ENETUNREACH`) después de imprimir solo la URL del
+HTML. No llegó al resumen de controles; este fallo de conexión ya no bloquea la salida B1.
+El intento automático de SecurityHeaders respondió HTTP 403, sin calificación. Por separado,
+la [captura manual del reporte](docs/evidence/b1-securityheaders-manual.md) muestra **D** para
+<https://practica-cicd-micela.web.app/> (08 Nov 2026 16:23:08 UTC): HSTS presente y CSP,
+X-Frame-Options, X-Content-Type-Options, Referrer-Policy y Permissions-Policy ausentes.
+Esto completa B1 sin afirmar que el escaneo automático haya funcionado ni que la base esté
+endurecida. No se verificó la interacción del filtro o la imagen en navegador.
+
+Evidencias conservadas:
+
+- [Despliegue, incidente corregido y límites](docs/evidence/baseline-deployment.md).
+- [Salida manual del script B1 y captura original](docs/evidence/b1-manual-output.md).
+- [Identidad, headers, rutas y fallo histórico del intento automático](docs/evidence/b1-headers.json).
+  Para publicar este JSON solo se sustituyó el prefijo absoluto local del proyecto en
+  `stderr` por `<PROJECT_ROOT>`; el original sin redacción se conserva privadamente.
+  Mediciones, `stdout`, `exitCode`, marcas temporales y demás campos no cambiaron.
+- [Respuesta automática histórica de SecurityHeaders: HTTP 403 sin calificación](docs/evidence/b1-securityheaders.json).
+- [Reporte manual de SecurityHeaders: D y captura](docs/evidence/b1-securityheaders-manual.md).
+
 ### Pendiente en las cuentas de la usuaria
 
-- [ ] Login y vinculación de GitHub; confirmar el nombre exacto del secreto.
-- [ ] Medición B1 real de producción sin hardening y calificación de securityheaders.com.
-  Como esta rama ya contiene headers, no desplegarla como si fuera el estado inicial.
-  La medición inicial requiere publicar primero la base sin estos cambios de seguridad.
+- [x] Login y vinculación de GitHub; nombre exacto del secreto confirmado.
+- [x] Publicación autorizada de la base sin hardening y comprobación de identidad pública.
+- [x] Salida íntegra de `check-headers.mjs` en la captura aportada por la usuaria.
+- [x] B1: salida manual del script y captura de SecurityHeaders con calificación D
+  sobre la base sin hardening. La base permanece publicada; no desplegar esta rama
+  todavía como si fuera el estado inicial.
+- [ ] Cadena autorizada pero no entregada: PR de fuente `feat/firebase-cicd` → `main`
+  (commit `3f6b763fa7d92d94823bd2be41fded8cc8825fe3`) y PR de evidencia B1
+  `docs/firebase-b1-evidence` → `feat/firebase-cicd` tras confirmar su commit. Ambos
+  referirán sin cerrar la [issue aprobada #1](https://github.com/micaelahryhorezuk/practica-firebase-cicd/issues/1).
 - [ ] PR mergeado, comentario del bot y URL de preview: **pendientes**.
 - [ ] Verificación del filtro y la portada en navegador local y preview.
 - [ ] Medición B5 de producción: pegar salida real de `check-headers.mjs` y calificación final.
