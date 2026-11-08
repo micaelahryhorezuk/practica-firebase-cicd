@@ -11,6 +11,37 @@ camino a producción y endurecer la seguridad de lo que se sirve.
 
 ---
 
+## Estado de esta copia
+
+Proyecto configurado: **`practica-cicd-micela`**. Los workflows ya implementan A1–A3;
+los comentarios A4 y A5 son extras opcionales que todavía no se implementaron.
+El preview compila el SHA de la rama del PR; los PR de forks se omiten para no usar secretos.
+
+Antes de publicar, desde la carpeta de este repositorio:
+
+1. Ejecutar `npx firebase login` en una terminal propia.
+2. Ejecutar `npx firebase init hosting:github`, elegir
+   `micaelahryhorezuk/practica-firebase-cicd` y **no sobrescribir los workflows**.
+3. Confirmar en GitHub → Settings → Secrets and variables → Actions el nombre del secreto.
+   Ambos workflows prevén `FIREBASE_SERVICE_ACCOUNT_PRACTICA_CICD_MICELA`, pero **su
+   existencia y nombre todavía no están verificados**. Si el asistente crea otro nombre,
+   reemplazar la referencia en ambos YAML y ajustar `tests/pipeline.test.mjs`.
+   No copiar el valor del secreto a archivos, capturas ni conversaciones.
+4. Antes de push, revisar los cambios que haya hecho el asistente. Push, PR, merge y deploy
+   requieren un paso posterior: esta preparación no ejecuta esas operaciones.
+
+Checks locales: `node --test tests/*.test.mjs`, `npm run typecheck` y `npm run build`.
+Para verificar HTTP sin usar un proyecto real:
+
+```bash
+npx firebase emulators:exec --only hosting --project demo-practica-cicd-micela \
+  "node scripts/check-headers.mjs http://127.0.0.1:5000"
+```
+
+Ver los fundamentos y las evidencias pendientes en [REFLEXION.md](REFLEXION.md).
+El emulador no reemplaza las mediciones antes/después en producción ni la prueba del filtro
+y la imagen en un navegador.
+
 ## Arquitectura
 
 ```
