@@ -23,21 +23,30 @@ Estado verificado tras la vinculación y el despliegue inicial:
 - GitHub confirmó el secreto `FIREBASE_SERVICE_ACCOUNT_PRACTICA_CICD_MICELA`, coincidente
   con ambos workflows. Solo se consultaron nombre y fecha, nunca su valor.
 - Con autorización explícita, se publicó la **base sin hardening** `bc9898b` en
-  <https://practica-cicd-micela.web.app>, desde una copia aislada. La rama actual conserva
-  las mejoras de seguridad y todavía no se publicó.
+  <https://practica-cicd-micela.web.app>, desde una copia aislada. Las mejoras de seguridad
+  están publicadas solo en previews; producción conserva esa base.
 - La [salida manual del script B1](docs/evidence/b1-manual-output.md) ya fue aportada en una
   captura sobre la base sin hardening. La [medición automática anterior](docs/evidence/b1-headers.json)
   falló por conexión; se conserva como antecedente, no como bloqueo actual del script.
 - **B1 completa por evidencia manual:** el [reporte de SecurityHeaders y su captura](docs/evidence/b1-securityheaders-manual.md)
   muestran calificación **D** para la base sin hardening. El intento automático anterior
   devolvió HTTP 403 y permanece registrado como fallo histórico, no como escaneo exitoso.
-  El push de fuente y los PR de preview ahora están autorizados, pero **no ejecutados**;
-  merge, publicación del hardening y rollback no están autorizados.
-- Entrega seleccionada: cadena hacia `main` en dos PR sin merge. Primero fuente
-  `feat/firebase-cicd` → `main` (commit `3f6b763fa7d92d94823bd2be41fded8cc8825fe3`);
-  después evidencia B1 `docs/firebase-b1-evidence` → `feat/firebase-cicd`, cuando se confirme
-  su commit. Issue aprobada [#1](https://github.com/micaelahryhorezuk/practica-firebase-cicd/issues/1),
-  referencia no cerrante `Refs #1`. Todavía no hay preview ni verificación de navegador.
+- Entrega en dos PR abiertos y no draft, sin merge: [fuente #2](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/2)
+  `feat/firebase-cicd` → `main` (commit `3f6b763fa7d92d94823bd2be41fded8cc8825fe3`,
+  342 líneas) y [evidencia B1 #3](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/3)
+  `docs/firebase-b1-evidence` → `feat/firebase-cicd` (commit
+  `5404476eae8beb1b97838d754a5dbbf0ba754b0f`, 388 líneas). Ambos referencian sin cerrar
+  la [issue aprobada #1](https://github.com/micaelahryhorezuk/practica-firebase-cicd/issues/1),
+  aún abierta. El commit de evidencia conserva los resultados documentales de T6–T8b.
+  En el SHA de fuente, `build_and_preview` y `Deploy Preview` terminaron SUCCESS (run
+  42503835084). El [preview de fuente](https://practica-cicd-micela--pr2-feat-firebase-cicd-zjdzsiyo.web.app)
+  respondió HTTP 200 con SHA `3f6b763` y rama correctos; `check-headers.mjs` pasó todos los
+  controles de headers y caché (exit 0). Esto no acredita interacción en navegador.
+  El [preview de evidencia](https://practica-cicd-micela--pr3-docs-firebase-b1-evi-eftmpc87.web.app)
+  también pasó CI y los controles HTTP de headers, caché y metadatos para `5404476`
+  (run 42503853409). El cierre documental posterior tendrá su propia comprobación de CI.
+  La interacción en navegador sigue pendiente; merge, publicación del hardening, B5 y
+  rollback no están autorizados.
 
 Detalle del despliegue y su corrección de destino:
 [docs/evidence/baseline-deployment.md](docs/evidence/baseline-deployment.md).

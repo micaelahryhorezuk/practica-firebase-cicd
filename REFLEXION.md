@@ -2,9 +2,16 @@
 
 Repositorio: https://github.com/micaelahryhorezuk/practica-firebase-cicd
 Producción: https://practica-cicd-micela.web.app (**base sin hardening verificada por HTTP**).
-Se publicó únicamente la base `bc9898b` con autorización explícita. Las mejoras de esta rama
-siguen locales: push y PR de preview ya autorizados, pero aún no ejecutados; sin merge,
-publicación del hardening ni rollback autorizados.
+Se publicó únicamente la base `bc9898b` con autorización explícita. Las mejoras están en
+[PR de fuente #2](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/2)
+(`feat/firebase-cicd` → `main`, `3f6b763fa7d92d94823bd2be41fded8cc8825fe3`) y
+[PR de evidencia #3](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/3)
+(`docs/firebase-b1-evidence` → `feat/firebase-cicd`,
+`5404476eae8beb1b97838d754a5dbbf0ba754b0f`); ambos abiertos, sin merge.
+Los previews de los commits indicados pasaron CI y comprobaciones HTTP de headers, caché
+e identidad (runs 42503835084 y 42503853409). Esto no acredita interacción en navegador;
+el cierre documental posterior tendrá su propio CI. Publicación del hardening,
+B5 y rollback no están autorizados.
 
 ## 1. ¿Por qué vence el preview?
 
@@ -144,11 +151,22 @@ Evidencias conservadas:
 - [x] B1: salida manual del script y captura de SecurityHeaders con calificación D
   sobre la base sin hardening. La base permanece publicada; no desplegar esta rama
   todavía como si fuera el estado inicial.
-- [ ] Cadena autorizada pero no entregada: PR de fuente `feat/firebase-cicd` → `main`
-  (commit `3f6b763fa7d92d94823bd2be41fded8cc8825fe3`) y PR de evidencia B1
-  `docs/firebase-b1-evidence` → `feat/firebase-cicd` tras confirmar su commit. Ambos
-  referirán sin cerrar la [issue aprobada #1](https://github.com/micaelahryhorezuk/practica-firebase-cicd/issues/1).
-- [ ] PR mergeado, comentario del bot y URL de preview: **pendientes**.
+- [x] Cadena entregada sin merge: [PR #2 de fuente](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/2)
+  `feat/firebase-cicd` → `main` (`3f6b763fa7d92d94823bd2be41fded8cc8825fe3`,
+  342 líneas) y [PR #3 de evidencia](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/3)
+  `docs/firebase-b1-evidence` → `feat/firebase-cicd`
+  (`5404476eae8beb1b97838d754a5dbbf0ba754b0f`, 388 líneas). Ambos enlazan sin cerrar
+  la [issue aprobada #1](https://github.com/micaelahryhorezuk/practica-firebase-cicd/issues/1),
+  todavía abierta. El commit de evidencia contiene la documentación de T6–T8b.
+- [x] CI de los SHA indicados: fuente SUCCESS (run 42503835084) y evidencia SUCCESS
+  (run 42503853409). La actualización documental posterior requiere su propio CI.
+- [x] Comentarios del bot y URLs de preview verificados:
+  [fuente](https://practica-cicd-micela--pr2-feat-firebase-cicd-zjdzsiyo.web.app) y
+  [evidencia](https://practica-cicd-micela--pr3-docs-firebase-b1-evi-eftmpc87.web.app).
+  Ambos: HTTP 200, SHA/rama correctos y `check-headers.mjs` exit 0, todos los controles.
+  HSTS lo agrega Firebase, HTML usa `no-cache` y JS caché anual `immutable`.
+  Esto no es una comprobación interactiva de navegador ni la medición B5 de producción.
+- [ ] Merge de PR: pendiente, sin autorización.
 - [ ] Verificación del filtro y la portada en navegador local y preview.
 - [ ] Medición B5 de producción: pegar salida real de `check-headers.mjs` y calificación final.
 - [ ] Rollback desde Hosting → Release history y comparación del SHA anterior/posterior.
