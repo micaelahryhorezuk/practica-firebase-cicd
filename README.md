@@ -38,10 +38,11 @@ Estado actual (las capturas de la base y de previews citadas abajo son **anterio
   SUCCESS, `Deploy al canal live` SUCCESS); sin bypass, squash ni borrado de ramas.
 - [Medición B5 local](docs/evidence/b5-production.md): el script público terminó exit 0,
   con HTML 200, headers presentes, HTML `no-cache` y JS anual `immutable`. El fetch separado
-  del footer falló (`ETIMEDOUT`, colector exit 2); el SHA esperado `c3051dc` **no** es
-  prueba de identidad obtenida. La nota final de SecurityHeaders es **UNKNOWN**. Faltan
-  captura nueva del reporte (URL/hora/calificación) y captura de footer live
-  `c3051dc`/`main`. No se autorizó publicar estas notas locales ni ejecutar rollback.
+  del footer falló (`ETIMEDOUT`, colector exit 2), pero una
+  [captura manual B5](docs/evidence/b5-manual-verification.md) muestra la URL live y el pie
+  `c3051dc`/`main` legible aunque parcialmente cortado abajo; no cambia el JSON automático.
+  La nota final de SecurityHeaders es **UNKNOWN**: falta solo una captura nueva del reporte
+  con URL/hora/calificación. No se autorizó publicar estas notas locales ni ejecutar rollback.
 
 Detalle del despliegue y su corrección de destino:
 [docs/evidence/baseline-deployment.md](docs/evidence/baseline-deployment.md).

@@ -10,9 +10,11 @@ se integró a `main` (`88e0938ab783d90d28820274fe7f88cefa886da5`, run de producc
 42534289830 SUCCESS) y luego [PR #3](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/3)
 (`c3051dc842a6de6fc15471cab8e8049c8cec5ce7`, run 42534675406 SUCCESS); ambos
 incluyeron `Deploy al canal live`. La [medición B5 local](docs/evidence/b5-production.md)
-registra script público exit 0 para headers/caché, pero el fetch separado de identidad
-falló, y aún no hay calificación final de SecurityHeaders ni captura del footer live.
-Estas notas no están autorizadas para publicación; rollback no fue autorizado ni ejecutado.
+registra script público exit 0 para headers/caché; el fetch separado de identidad falló.
+La [captura manual B5](docs/evidence/b5-manual-verification.md) confirma el footer live
+`c3051dc`/`main` junto a la URL, aunque el pie está parcialmente cortado abajo. Aún no hay
+calificación final de SecurityHeaders. Estas notas no están autorizadas para publicación;
+rollback no fue autorizado ni ejecutado.
 
 ## 1. ¿Por qué vence el preview?
 
@@ -156,11 +158,13 @@ El [registro B5 y su JSON crudo](docs/evidence/b5-production.md) documentan scri
 exit 0 (HTML 200, seis headers presentes, HTML `no-cache`, JS anual `immutable`) a
 `2026-11-08T23:24:42.774Z`. El colector terminó exit 2 por un fetch **separado** de
 identidad (`ETIMEDOUT`); `identity.verified=false`, `httpVerificationComplete=false` y
-`securityHeadersGrade=null`. `c3051dc` era el commit esperado, **no** el footer comprobado.
-La nota final es **UNKNOWN**, no una extrapolación de la D inicial; el HTTP 403 del scanner
-corresponde solo a B1. Falta captura nueva del reporte con URL/hora/calificación y captura
-del footer live con `c3051dc`/`main`. No se hicieron nuevas consultas ni rollback; estas
-notas son locales y aún no están publicadas.
+`securityHeadersGrade=null`. `c3051dc` era el commit esperado en ese JSON, **no** el footer
+leído automáticamente. La [captura manual B5](docs/evidence/b5-manual-verification.md)
+muestra URL live y footer `c3051dc`/`main`, legibles pese al corte inferior; no sustituye
+el fetch automático fallido. La nota final sigue **UNKNOWN**, no una extrapolación de la
+**D** inicial (08 Nov 2026 16:23:08 UTC); el HTTP 403 del scanner corresponde solo a B1.
+Falta únicamente una captura nueva del reporte de SecurityHeaders B5 con URL, hora y nota.
+No se hicieron nuevas consultas ni rollback; estas notas son locales y aún no están publicadas.
 
 ### Seguimiento de la usuaria
 
@@ -195,10 +199,12 @@ notas son locales y aún no están publicadas.
   interactiva del agente ni confirmación equivalente de producción.
 - [x] B5: salida real del script público registrada con exit 0 en
   [evidencia local](docs/evidence/b5-production.md); no es calificación ni identidad live.
-- [ ] B5: captura nueva de SecurityHeaders con URL, hora y nota final; y captura del footer
-  live con `c3051dc`/`main` tras el fallo de identidad por `ETIMEDOUT`.
+- [x] B5: captura manual del footer live `c3051dc`/`main` junto a la URL; el fallo
+  automático de identidad por `ETIMEDOUT` se conserva por separado.
+- [ ] B5: captura nueva de SecurityHeaders con URL, hora y nota final.
 - [ ] Rollback desde Hosting → Release history y comparación del SHA anterior/posterior:
   pendiente y **no autorizado**, no ejecutado.
 
-No se presentan las capturas históricas como prueba de identidad B5 ni se considera
-completada la calificación final. Ninguna nota B5 local está publicada remotamente.
+No se presentan las capturas históricas como prueba de identidad B5; la captura nueva
+confirma solo el footer, no la calificación final. Ninguna nota B5 local está publicada
+remotamente.

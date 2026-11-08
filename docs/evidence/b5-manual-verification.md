@@ -1,0 +1,7 @@
+# B5 · comprobación manual parcial de producción
+
+**Footer confirmado; calificación final pendiente.** La captura original aportada por la usuaria tras «listo» muestra la URL visible `https://practica-cicd-micela.web.app` y, en el borde inferior, el pie `Versión c3051dc`, `Rama main` y `Build: 2026-11-08T20:20:08-03:00`. El pie está parcialmente cortado por el borde inferior, pero el SHA corto y la rama son legibles. Esta captura no muestra un reporte de SecurityHeaders, su nota ni su hora.
+
+[Ver captura original sin modificar](Captura%20de%20pantalla%202026-11-08%20204322.png). Solo se ven la URL pública de producción y el contenido de la app; no se observan secretos, datos personales ni rutas locales privadas. No se infiere de su nombre una hora de captura ni se usa la fecha de build como hora del reporte.
+
+La [medición automática B5 anterior](b5-headers.json) conserva el script exit 0 para headers/caché, pero el fetch separado de identidad falló con `ETIMEDOUT` (colector exit 2, `identity.verified=false`, `httpVerificationComplete=false`, `securityHeadersGrade=null`). La captura confirma el footer **por vía manual**, sin reescribir ese fallo automático. La [nota inicial B1](b1-securityheaders-manual.md) fue **D** a 08 Nov 2026 16:23:08 UTC; la nota B5 sigue **UNKNOWN** hasta recibir una captura nueva del reporte de SecurityHeaders para esa URL con nota y hora visibles. No hay prueba interactiva del agente ni autorización para publicar este registro local o ejecutar rollback.
