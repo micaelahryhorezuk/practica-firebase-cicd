@@ -1,0 +1,22 @@
+{
+  "phase": "B5",
+  "measuredAt": "2026-11-08T23:24:42.774Z",
+  "baseUrl": "https://practica-cicd-micela.web.app",
+  "expectedCommit": "c3051dc842a6de6fc15471cab8e8049c8cec5ce7",
+  "productionRun": "https://github.com/micaelahryhorezuk/practica-firebase-cicd/actions/runs/42534675406",
+  "command": "node scripts/check-headers.mjs https://practica-cicd-micela.web.app",
+  "exitCode": 0,
+  "signal": null,
+  "stdout": "\n▶ HTML: https://practica-cicd-micela.web.app/\n\u001b[90m  status 200\u001b[0m\n  \u001b[32m✔\u001b[0m content-security-policy: \u001b[90mdefault-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self'; img-src 'self' https://picsum.photos …\u001b[0m\n  \u001b[32m✔\u001b[0m strict-transport-security: \u001b[90mmax-age=31556926; includeSubDomains; preload\u001b[0m\n  \u001b[32m✔\u001b[0m x-content-type-options: \u001b[90mnosniff\u001b[0m\n  \u001b[32m✔\u001b[0m x-frame-options: \u001b[90mDENY\u001b[0m\n  \u001b[32m✔\u001b[0m referrer-policy: \u001b[90mstrict-origin-when-cross-origin\u001b[0m\n  \u001b[32m✔\u001b[0m permissions-policy: \u001b[90mcamera=(), microphone=(), geolocation=()\u001b[0m\n  · cache-control: no-cache\n\n▶ Asset estático: /_next/static/chunks/1x6obpmlu1_c2.js\n  \u001b[32m✔\u001b[0m cache-control: public, max-age=31536000, immutable\n\u001b[32m\n✅ Todos los controles pasaron.\n\u001b[0m\n",
+  "stderr": "",
+  "processError": null,
+  "identity": {
+    "verified": false,
+    "error": "fetch failed",
+    "code": "ETIMEDOUT",
+    "stack": "TypeError: fetch failed\n    at node:internal/deps/undici/undici:13510:13\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async file://<PROJECT_ROOT>/[eval1]:15:11"
+  },
+  "httpVerificationComplete": false,
+  "securityHeadersGrade": null,
+  "gradeNote": "No measured final grade. Previous automated scanner access returned403; human browser evidence is required rather than an invented grade."
+}

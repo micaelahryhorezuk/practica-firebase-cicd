@@ -1,19 +1,18 @@
 # Reflexión · CI/CD con Firebase Hosting
 
 Repositorio: https://github.com/micaelahryhorezuk/practica-firebase-cicd
-Producción: https://practica-cicd-micela.web.app (**base sin hardening verificada por HTTP**).
-Se publicó únicamente la base `bc9898b` con autorización explícita. Las mejoras están en
-[PR de fuente #2](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/2)
-(`feat/firebase-cicd` → `main`, `3f6b763fa7d92d94823bd2be41fded8cc8825fe3`) y
-[PR de evidencia #3](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/3)
-(`docs/firebase-b1-evidence` → `feat/firebase-cicd`, cierre `b6639e2`);
-ambos abiertos, sin merge. Los previews anteriores pasaron CI y comprobaciones HTTP de
-headers, caché e identidad (runs 42503835084 y 42503853409). El cierre `b6639e2`
-pasó CI (run 42505029051), pero su última consulta HTTP automática falló por conexión.
-Las [capturas manuales de versión](docs/evidence/manual-version-verification.md) muestran
-`b6639e2`/`docs/firebase-b1-evidence` en el preview de `/cursos` y
-`bc9898b`/`baseline` en producción. No acreditan interacción en navegador ni éxito
-HTTP automático. Publicación del hardening, B5 y rollback no están autorizados.
+Producción: https://practica-cicd-micela.web.app. **Antes de los merges**, la base
+`bc9898b` sin hardening estaba verificada por HTTP; las
+[capturas manuales de versión](docs/evidence/manual-version-verification.md) muestran
+preview `b6639e2` y producción `bc9898b` en ese momento, no el footer live actual.
+Con autorización posterior S9, [PR #2](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/2)
+se integró a `main` (`88e0938ab783d90d28820274fe7f88cefa886da5`, run de producción
+42534289830 SUCCESS) y luego [PR #3](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/3)
+(`c3051dc842a6de6fc15471cab8e8049c8cec5ce7`, run 42534675406 SUCCESS); ambos
+incluyeron `Deploy al canal live`. La [medición B5 local](docs/evidence/b5-production.md)
+registra script público exit 0 para headers/caché, pero el fetch separado de identidad
+falló, y aún no hay calificación final de SecurityHeaders ni captura del footer live.
+Estas notas no están autorizadas para publicación; rollback no fue autorizado ni ejecutado.
 
 ## 1. ¿Por qué vence el preview?
 
@@ -46,6 +45,8 @@ El HTML exportado contiene tres scripts inline en cada página inspeccionada: `/
 y `404.html`. `script-src 'self'` permite archivos del propio origen, pero no estos scripts
 inline de hidratación de Next.js. Por ello podría verse la página y no funcionar el filtro.
 Esto se comprobó inspeccionando el HTML, **no reproduciendo el bloqueo en un navegador**.
+La usuaria informó después que el filtro funciona y la imagen de Inicio se ve en el preview;
+es su comprobación manual, no interacción del agente ni observación de producción.
 
 La política preparada permite `'unsafe-inline'` solo en `script-src`, sin `'unsafe-eval'`.
 Es una concesión: los scripts inline legítimos funcionan, pero también podrían ejecutarse
@@ -61,7 +62,9 @@ archivos estáticos no proporciona esa garantía.
 La portada solicita `https://picsum.photos` y un GET real respondió con redirección 302 a
 `https://fastly.picsum.photos`, seguido de HTTP 200 (`image/jpeg`). Ambos orígenes exactos
 están en `img-src`; no se habilitaron `https:` ni comodines. La solicitud HEAD respondió 405,
-por eso la evidencia relevante es el GET. Falta validar la imagen y el filtro en navegador.
+por eso la evidencia relevante es el GET. La usuaria confirmó filtro e imagen en el
+preview (L25 del seguimiento ODD); el agente no realizó esa prueba interactiva ni la
+comprobó en producción.
 
 ## 5. Headers básicos
 
@@ -132,7 +135,8 @@ la [captura manual del reporte](docs/evidence/b1-securityheaders-manual.md) mues
 <https://practica-cicd-micela.web.app/> (08 Nov 2026 16:23:08 UTC): HSTS presente y CSP,
 X-Frame-Options, X-Content-Type-Options, Referrer-Policy y Permissions-Policy ausentes.
 Esto completa B1 sin afirmar que el escaneo automático haya funcionado ni que la base esté
-endurecida. No se verificó la interacción del filtro o la imagen en navegador.
+endurecida. La usuaria confirmó después filtro e imagen en preview; no es una
+comprobación interactiva del agente.
 
 Evidencias conservadas:
 
@@ -146,15 +150,28 @@ Evidencias conservadas:
 - [Reporte manual de SecurityHeaders: D y captura](docs/evidence/b1-securityheaders-manual.md).
 - [Capturas manuales de versión: preview de cierre y base en producción](docs/evidence/manual-version-verification.md).
 
-### Pendiente en las cuentas de la usuaria
+### B5: medición parcial de producción tras los merges
+
+El [registro B5 y su JSON crudo](docs/evidence/b5-production.md) documentan script público
+exit 0 (HTML 200, seis headers presentes, HTML `no-cache`, JS anual `immutable`) a
+`2026-11-08T23:24:42.774Z`. El colector terminó exit 2 por un fetch **separado** de
+identidad (`ETIMEDOUT`); `identity.verified=false`, `httpVerificationComplete=false` y
+`securityHeadersGrade=null`. `c3051dc` era el commit esperado, **no** el footer comprobado.
+La nota final es **UNKNOWN**, no una extrapolación de la D inicial; el HTTP 403 del scanner
+corresponde solo a B1. Falta captura nueva del reporte con URL/hora/calificación y captura
+del footer live con `c3051dc`/`main`. No se hicieron nuevas consultas ni rollback; estas
+notas son locales y aún no están publicadas.
+
+### Seguimiento de la usuaria
 
 - [x] Login y vinculación de GitHub; nombre exacto del secreto confirmado.
 - [x] Publicación autorizada de la base sin hardening y comprobación de identidad pública.
 - [x] Salida íntegra de `check-headers.mjs` en la captura aportada por la usuaria.
 - [x] B1: salida manual del script y captura de SecurityHeaders con calificación D
-  sobre la base sin hardening. La base permanece publicada; no desplegar esta rama
-  todavía como si fuera el estado inicial.
-- [x] Cadena entregada sin merge: [PR #2 de fuente](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/2)
+  sobre la base sin hardening. Ese era el estado inicial; el hardening se desplegó
+  después de integrar ambos PR.
+- [x] Cadena entregada inicialmente como PR de preview (etapa anterior):
+  [PR #2 de fuente](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/2)
   `feat/firebase-cicd` → `main` (`3f6b763fa7d92d94823bd2be41fded8cc8825fe3`,
   342 líneas) y [PR #3 de evidencia](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/3)
   `docs/firebase-b1-evidence` → `feat/firebase-cicd`
@@ -172,10 +189,16 @@ Evidencias conservadas:
   Ambos: HTTP 200, SHA/rama correctos y `check-headers.mjs` exit 0, todos los controles.
   HSTS lo agrega Firebase, HTML usa `no-cache` y JS caché anual `immutable`.
   Esto no es una comprobación interactiva de navegador ni la medición B5 de producción.
-- [ ] Merge de PR: pendiente, sin autorización.
-- [ ] Verificación del filtro y la portada en navegador local y preview.
-- [ ] Medición B5 de producción: pegar salida real de `check-headers.mjs` y calificación final.
-- [ ] Rollback desde Hosting → Release history y comparación del SHA anterior/posterior.
+- [x] PR #2 y luego PR #3 integrados normalmente en `main` con S9; runs 42534289830 y
+  42534675406 SUCCESS, incluido `Deploy al canal live` en ambos. Sin bypass ni rollback.
+- [x] Filtro e imagen confirmados manualmente por la usuaria en preview (L25); no hay prueba
+  interactiva del agente ni confirmación equivalente de producción.
+- [x] B5: salida real del script público registrada con exit 0 en
+  [evidencia local](docs/evidence/b5-production.md); no es calificación ni identidad live.
+- [ ] B5: captura nueva de SecurityHeaders con URL, hora y nota final; y captura del footer
+  live con `c3051dc`/`main` tras el fallo de identidad por `ETIMEDOUT`.
+- [ ] Rollback desde Hosting → Release history y comparación del SHA anterior/posterior:
+  pendiente y **no autorizado**, no ejecutado.
 
-No se presentan mediciones locales como evidencia de producción ni se declara ejecutado
-ninguno de los pasos pendientes.
+No se presentan las capturas históricas como prueba de identidad B5 ni se considera
+completada la calificación final. Ninguna nota B5 local está publicada remotamente.
