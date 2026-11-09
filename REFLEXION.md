@@ -12,8 +12,10 @@ se integró a `main` (`88e0938ab783d90d28820274fe7f88cefa886da5`, run de producc
 incluyeron `Deploy al canal live`. La [medición B5 local](docs/evidence/b5-production.md)
 registra script público exit 0 para headers/caché; el fetch separado de identidad falló.
 La [captura manual B5](docs/evidence/b5-manual-verification.md) confirma el footer live
-`c3051dc`/`main` junto a la URL, aunque el pie está parcialmente cortado abajo. Aún no hay
-calificación final de SecurityHeaders. Estas notas no están autorizadas para publicación;
+`c3051dc`/`main` junto a la URL, aunque el pie está parcialmente cortado abajo. Un
+[reporte manual B5](docs/evidence/b5-manual-verification.md) muestra **A** para la URL
+live a 09 Nov 2026 00:04:18 UTC, frente a la **D** inicial; el JSON automático sigue
+con `securityHeadersGrade=null`. Estas notas no están autorizadas para publicación;
 rollback no fue autorizado ni ejecutado.
 
 ## 1. ¿Por qué vence el preview?
@@ -152,7 +154,7 @@ Evidencias conservadas:
 - [Reporte manual de SecurityHeaders: D y captura](docs/evidence/b1-securityheaders-manual.md).
 - [Capturas manuales de versión: preview de cierre y base en producción](docs/evidence/manual-version-verification.md).
 
-### B5: medición parcial de producción tras los merges
+### B5: medición de producción y reporte manual tras los merges
 
 El [registro B5 y su JSON crudo](docs/evidence/b5-production.md) documentan script público
 exit 0 (HTML 200, seis headers presentes, HTML `no-cache`, JS anual `immutable`) a
@@ -161,10 +163,13 @@ identidad (`ETIMEDOUT`); `identity.verified=false`, `httpVerificationComplete=fa
 `securityHeadersGrade=null`. `c3051dc` era el commit esperado en ese JSON, **no** el footer
 leído automáticamente. La [captura manual B5](docs/evidence/b5-manual-verification.md)
 muestra URL live y footer `c3051dc`/`main`, legibles pese al corte inferior; no sustituye
-el fetch automático fallido. La nota final sigue **UNKNOWN**, no una extrapolación de la
-**D** inicial (08 Nov 2026 16:23:08 UTC); el HTTP 403 del scanner corresponde solo a B1.
-Falta únicamente una captura nueva del reporte de SecurityHeaders B5 con URL, hora y nota.
-No se hicieron nuevas consultas ni rollback; estas notas son locales y aún no están publicadas.
+el fetch automático fallido. La [nueva captura original del reporte SecurityHeaders](docs/evidence/Captura%20de%20pantalla%202026-11-08%20210426.png)
+muestra `https://practica-cicd-micela.web.app/`, **A** a 09 Nov 2026 00:04:18 UTC e
+indicadores verdes de CSP y los cinco headers básicos; el aviso indica nota limitada a A,
+pero no se ven las advertencias. La comparación manual es **D** (08 Nov 2026 16:23:08 UTC)
+→ **A**; el HTTP 403 del scanner corresponde solo a B1. La nota en el JSON B5 sigue
+`null`: no se cambian los resultados automáticos con evidencias manuales. B5 está documentada
+sin nuevas consultas ni rollback; estas notas son locales y aún no están publicadas.
 
 ### Seguimiento de la usuaria
 
@@ -201,10 +206,10 @@ No se hicieron nuevas consultas ni rollback; estas notas son locales y aún no e
   [evidencia local](docs/evidence/b5-production.md); no es calificación ni identidad live.
 - [x] B5: captura manual del footer live `c3051dc`/`main` junto a la URL; el fallo
   automático de identidad por `ETIMEDOUT` se conserva por separado.
-- [ ] B5: captura nueva de SecurityHeaders con URL, hora y nota final.
+- [x] B5: reporte nuevo manual de SecurityHeaders para la URL live: **A** a
+  09 Nov 2026 00:04:18 UTC, frente a B1 **D**; JSON automático sin cambio.
 - [ ] Rollback desde Hosting → Release history y comparación del SHA anterior/posterior:
   pendiente y **no autorizado**, no ejecutado.
 
-No se presentan las capturas históricas como prueba de identidad B5; la captura nueva
-confirma solo el footer, no la calificación final. Ninguna nota B5 local está publicada
-remotamente.
+Las capturas históricas no prueban identidad B5: una captura manual nueva confirma el
+footer y otra distinta el reporte A. Ninguna nota B5 local está publicada remotamente.

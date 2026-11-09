@@ -1,6 +1,6 @@
 # B5 · producción tras integrar los dos PR
 
-**Resultado parcial:** el script público pasó los controles de headers y caché en el sitio live. Una [captura manual B5](b5-manual-verification.md) confirma el footer live `c3051dc`/`main`, pero la calificación final de SecurityHeaders **sigue sin comprobarse**. Este registro es local: no hay autorización para publicarlo en GitHub ni para crear otro PR.
+**B5 completada con evidencia automática y manual separada:** el script público pasó los controles de headers y caché en live. Las [dos capturas manuales B5](b5-manual-verification.md) confirman el footer `c3051dc`/`main` y un reporte SecurityHeaders **A** para `https://practica-cicd-micela.web.app/` a 09 Nov 2026 00:04:18 UTC. El fetch automático de identidad sigue fallido y el JSON conserva nota nula. Este registro es local: no hay autorización para publicarlo en GitHub ni para crear otro PR.
 
 | Etapa | Evidencia observada |
 |---|---|
@@ -33,14 +33,14 @@ El [JSON público de la medición](b5-headers.json) conserva los resultados y so
 
 La línea CSP termina en `…` porque **el script original la truncó**; esto no es la política completa observada. La salida muestra HTML 200, los seis headers que imprime (CSP y cinco básicos), `no-cache` en HTML y caché pública anual inmutable en JS. No equivale a medir una calificación del escáner ni a comprobar el footer.
 
-## Comparación y pruebas pendientes
+## Comparación y límites de las pruebas
 
 | Control | B1: base sin hardening | B5: después de los merges |
 |---|---|---|
 | Script público | [Captura manual](b1-manual-output.md): HTML 200, cinco controles básicos/CSP faltantes salvo HSTS; HTML y JS `max-age=3600`; seis controles pendientes. | Esta medición: exit 0, todos los controles pasaron, HTML `no-cache` y JS `public, max-age=31536000, immutable`. |
-| SecurityHeaders | [Captura manual del reporte](b1-securityheaders-manual.md): **D**, 08 Nov 2026 16:23:08 UTC. El 403 automático es histórico de B1. | **UNKNOWN**: la nueva captura no muestra reporte, nota ni hora de SecurityHeaders. |
+| SecurityHeaders | [Captura manual del reporte](b1-securityheaders-manual.md): **D**, 08 Nov 2026 16:23:08 UTC. El 403 automático es histórico de B1. | [Reporte manual B5](b5-manual-verification.md) ([imagen original](Captura%20de%20pantalla%202026-11-08%20210426.png)): **A**, `https://practica-cicd-micela.web.app/`, 09 Nov 2026 00:04:18 UTC. Indicadores verdes de CSP y los cinco headers básicos; aviso de nota limitada a A, advertencias no visibles. No es una calificación automática. |
 | Identidad visible | La [captura manual previa](manual-version-verification.md) corresponde a la base `bc9898b` en producción, antes de los merges. | [Captura manual B5](b5-manual-verification.md): URL `https://practica-cicd-micela.web.app`, footer `Versión c3051dc`, `Rama main`; línea parcialmente cortada abajo, SHA y rama legibles. El fetch separado de identidad dio `fetch failed` / `ETIMEDOUT`; `identity.verified=false` y `httpVerificationComplete=false` siguen siendo los valores de esa medición automática. |
 
 El colector completo terminó **exit 2 por el fetch de identidad separado**, no porque fallara `check-headers.mjs` (exit 0, stderr vacío). `securityHeadersGrade=null`. No se repitieron solicitudes HTTP; el error de conexión no demuestra fallo del despliegue.
 
-Para cerrar T15 falta **una prueba externa**: captura nueva del reporte de SecurityHeaders B5 para `https://practica-cicd-micela.web.app/` con URL, hora y calificación visibles. El footer live ya quedó confirmado manualmente; no se convirtió el fallo HTTP histórico en éxito. Hasta recibir el reporte no hay nota final. La usuaria confirmó manualmente filtro e imagen en el preview (L25); no fue interacción de navegador observada por el agente ni prueba interactiva de producción. Rollback no fue autorizado ni ejecutado.
+T15 reúne el script B5 exit 0 y ambas pruebas externas: footer live y reporte nuevo con URL/hora/calificación visibles. La comparación manual es **D → A**; no se convirtió el fallo HTTP histórico en éxito. `securityHeadersGrade=null` permanece en el JSON del colector y el reporte manual A no prueba el detalle de CSP ni reemplaza pruebas interactivas. La usuaria confirmó manualmente filtro e imagen en el preview (L25); no fue interacción de navegador observada por el agente ni prueba interactiva de producción. Rollback no fue autorizado ni ejecutado.

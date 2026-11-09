@@ -41,8 +41,11 @@ Estado actual (las capturas de la base y de previews citadas abajo son **anterio
   del footer falló (`ETIMEDOUT`, colector exit 2), pero una
   [captura manual B5](docs/evidence/b5-manual-verification.md) muestra la URL live y el pie
   `c3051dc`/`main` legible aunque parcialmente cortado abajo; no cambia el JSON automático.
-  La nota final de SecurityHeaders es **UNKNOWN**: falta solo una captura nueva del reporte
-  con URL/hora/calificación. No se autorizó publicar estas notas locales ni ejecutar rollback.
+  Un [reporte manual B5 nuevo](docs/evidence/b5-manual-verification.md) para la URL live
+  muestra calificación **A** a 09 Nov 2026 00:04:18 UTC, frente a la **D** inicial
+  (08 Nov 2026 16:23:08 UTC). Son pruebas manuales separadas: el JSON automático conserva
+  `securityHeadersGrade=null` y el fallo de identidad. B5 queda documentada; no se autorizó
+  publicar estas notas locales ni ejecutar rollback.
 
 Detalle del despliegue y su corrección de destino:
 [docs/evidence/baseline-deployment.md](docs/evidence/baseline-deployment.md).
