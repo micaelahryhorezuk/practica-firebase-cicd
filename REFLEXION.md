@@ -15,8 +15,9 @@ La [captura manual B5](docs/evidence/b5-manual-verification.md) confirma el foot
 `c3051dc`/`main` junto a la URL, aunque el pie está parcialmente cortado abajo. Un
 [reporte manual B5](docs/evidence/b5-manual-verification.md) muestra **A** para la URL
 live a 09 Nov 2026 00:04:18 UTC, frente a la **D** inicial; el JSON automático sigue
-con `securityHeadersGrade=null`. Estas notas no están autorizadas para publicación;
-rollback no fue autorizado ni ejecutado.
+con `securityHeadersGrade=null`. El filtro y la imagen también se probaron en producción.
+Se hizo rollback a `bc9898b` y se restauró `c3051dc`; el detalle está en
+[la evidencia B5](docs/evidence/b5-production.md).
 
 ## 1. ¿Por qué vence el preview?
 
@@ -66,9 +67,10 @@ archivos estáticos no proporciona esa garantía.
 La portada solicita `https://picsum.photos` y un GET real respondió con redirección 302 a
 `https://fastly.picsum.photos`, seguido de HTTP 200 (`image/jpeg`). Ambos orígenes exactos
 están en `img-src`; no se habilitaron `https:` ni comodines. La solicitud HEAD respondió 405,
-por eso la evidencia relevante es el GET. La usuaria confirmó filtro e imagen en el
-preview (L25 del seguimiento ODD); el agente no realizó esa prueba interactiva ni la
-comprobó en producción.
+por eso la evidencia relevante es el GET. La usuaria confirmó filtro e imagen en el preview.
+Tras restaurar live, el 09 Nov 2026 02:28 UTC se probaron en producción: el filtro
+`intermedio` mostró 2 de 6 cursos y la imagen cargó a 960×320; el detalle está en
+[la evidencia B5](docs/evidence/b5-manual-verification.md).
 
 ## 5. Headers básicos
 
@@ -168,8 +170,9 @@ muestra `https://practica-cicd-micela.web.app/`, **A** a 09 Nov 2026 00:04:18 UT
 indicadores verdes de CSP y los cinco headers básicos; el aviso indica nota limitada a A,
 pero no se ven las advertencias. La comparación manual es **D** (08 Nov 2026 16:23:08 UTC)
 → **A**; el HTTP 403 del scanner corresponde solo a B1. La nota en el JSON B5 sigue
-`null`: no se cambian los resultados automáticos con evidencias manuales. B5 está documentada
-sin nuevas consultas ni rollback; estas notas son locales y aún no están publicadas.
+`null`: no se cambian los resultados automáticos con evidencias manuales. Se probó el
+filtro y la imagen en producción. Después se hizo rollback a `bc9898b` y se restauró la
+versión endurecida `c3051dc`; los IDs constan en la evidencia B5.
 
 ### Seguimiento de la usuaria
 
@@ -200,16 +203,18 @@ sin nuevas consultas ni rollback; estas notas son locales y aún no están publi
   Esto no es una comprobación interactiva de navegador ni la medición B5 de producción.
 - [x] PR #2 y luego PR #3 integrados normalmente en `main` con S9; runs 42534289830 y
   42534675406 SUCCESS, incluido `Deploy al canal live` en ambos. Sin bypass ni rollback.
-- [x] Filtro e imagen confirmados manualmente por la usuaria en preview (L25); no hay prueba
-  interactiva del agente ni confirmación equivalente de producción.
+- [x] Filtro e imagen confirmados por la usuaria en preview y probados en producción tras
+  restaurar live: filtro `intermedio` mostró 2 de 6 cursos e imagen cargó a 960×320
+  ([evidencia B5](docs/evidence/b5-manual-verification.md)).
 - [x] B5: salida real del script público registrada con exit 0 en
   [evidencia local](docs/evidence/b5-production.md); no es calificación ni identidad live.
 - [x] B5: captura manual del footer live `c3051dc`/`main` junto a la URL; el fallo
   automático de identidad por `ETIMEDOUT` se conserva por separado.
 - [x] B5: reporte nuevo manual de SecurityHeaders para la URL live: **A** a
   09 Nov 2026 00:04:18 UTC, frente a B1 **D**; JSON automático sin cambio.
-- [ ] Rollback desde Hosting → Release history y comparación del SHA anterior/posterior:
-  pendiente y **no autorizado**, no ejecutado.
+- [x] Rollback de producción a la versión base `bc9898b`, verificado por HTTP, y restauración
+  posterior de la versión endurecida `c3051dc`; ver IDs y versiones en la evidencia B5.
 
 Las capturas históricas no prueban identidad B5: una captura manual nueva confirma el
-footer y otra distinta el reporte A. Ninguna nota B5 local está publicada remotamente.
+footer y otra distinta el reporte A. La prueba interactiva de producción y el rollback
+están documentados por separado de las capturas.

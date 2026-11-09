@@ -26,9 +26,9 @@ Estado actual (las capturas de la base y de previews citadas abajo son **anterio
   y el [reporte manual B1](docs/evidence/b1-securityheaders-manual.md) registran calificación
   **D** y caché `max-age=3600`. Los fallos automáticos históricos de conexión y scanner
   HTTP 403 pertenecen a B1, no a un escaneo B5.
-- La usuaria confirmó manualmente filtro e imagen del preview (L25 en
-  [seguimiento ODD](odd/tasks/firebase-cicd.md)); no es prueba de navegador del agente ni de
-  interacción en producción. Las [capturas anteriores de versión](docs/evidence/manual-version-verification.md)
+- La usuaria confirmó manualmente filtro e imagen del preview. Tras restaurar live, el
+  09 Nov 2026 02:28 UTC se probó producción en navegador: el filtro `intermedio` mostró
+  2 de 6 cursos y la imagen de portada cargó a 960×320. Las [capturas anteriores de versión](docs/evidence/manual-version-verification.md)
   muestran preview `b6639e2` y producción base `bc9898b` **antes** de los merges.
 - Con el «si» posterior de S9, [PR #2](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/2)
   se integró normalmente a `main` en `88e0938ab783d90d28820274fe7f88cefa886da5`
@@ -43,9 +43,10 @@ Estado actual (las capturas de la base y de previews citadas abajo son **anterio
   `c3051dc`/`main` legible aunque parcialmente cortado abajo; no cambia el JSON automático.
   Un [reporte manual B5 nuevo](docs/evidence/b5-manual-verification.md) para la URL live
   muestra calificación **A** a 09 Nov 2026 00:04:18 UTC, frente a la **D** inicial
-  (08 Nov 2026 16:23:08 UTC). Son pruebas manuales separadas: el JSON automático conserva
-  `securityHeadersGrade=null` y el fallo de identidad. B5 queda documentada; no se autorizó
-  publicar estas notas locales ni ejecutar rollback.
+  (08 Nov 2026 16:23:08 UTC). También se probó el filtro y la imagen en producción.
+  Se hizo rollback a la versión base `bc9898b` y se restauró la versión endurecida
+  `c3051dc`; el [registro B5](docs/evidence/b5-production.md) conserva los IDs de release.
+  El JSON automático conserva `securityHeadersGrade=null` y el fallo de identidad.
 
 Detalle del despliegue y su corrección de destino:
 [docs/evidence/baseline-deployment.md](docs/evidence/baseline-deployment.md).

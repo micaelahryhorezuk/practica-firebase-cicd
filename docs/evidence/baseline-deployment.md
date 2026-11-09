@@ -7,7 +7,7 @@ Copia aislada: `../09-practica-firebase-cicd-baseline`, en detached HEAD.
 ## Alcance autorizado
 
 Ante la pregunta «¿Autorizas publicar primero la versión base sin hardening en **`practica-cicd-micela`**? Esto actualizará el sitio público; después mediremos B1 y seguiremos con el PR de mejoras.», la usuaria respondió «si».
-Esta ejecución publicó únicamente la base para medir B1. En esa etapa no se ejecutaron push, creación de PR, merge, publicación del hardening ni rollback. Después se autorizaron push y dos PR encadenados solo para preview (fuente hacia `main`, evidencia B1 hacia la rama de fuente), aún no ejecutados. Merge, publicación del hardening, B5 y rollback siguen sin autorizar.
+Esta ejecución publicó únicamente la base para medir B1. En esa etapa no se ejecutaron push, creación de PR, merge, publicación del hardening ni rollback. Después se autorizaron push y dos PR encadenados; con autorización posterior, ambos se integraron, el hardening se publicó y B5 se completó. El rollback a la versión base y la restauración de la versión endurecida están documentados en [la evidencia B5](b5-production.md).
 
 ## Comprobaciones previas
 
