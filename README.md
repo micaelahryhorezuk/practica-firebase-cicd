@@ -17,40 +17,36 @@ Proyecto configurado: **`practica-cicd-micela`**. Los workflows ya implementan A
 los comentarios A4 y A5 son extras opcionales que todavía no se implementaron.
 El preview compila el SHA de la rama del PR; los PR de forks se omiten para no usar secretos.
 
-Estado verificado tras la vinculación y el despliegue inicial:
+Estado actual (las capturas de la base y de previews citadas abajo son **anteriores** a los merges):
 
-- Login y `firebase init hosting:github` completados por la usuaria sin sobrescribir workflows.
-- GitHub confirmó el secreto `FIREBASE_SERVICE_ACCOUNT_PRACTICA_CICD_MICELA`, coincidente
-  con ambos workflows. Solo se consultaron nombre y fecha, nunca su valor.
-- Con autorización explícita, se publicó la **base sin hardening** `bc9898b` en
-  <https://practica-cicd-micela.web.app>, desde una copia aislada. Las mejoras de seguridad
-  están publicadas solo en previews; producción conserva esa base.
-- La [salida manual del script B1](docs/evidence/b1-manual-output.md) ya fue aportada en una
-  captura sobre la base sin hardening. La [medición automática anterior](docs/evidence/b1-headers.json)
-  falló por conexión; se conserva como antecedente, no como bloqueo actual del script.
-- **B1 completa por evidencia manual:** el [reporte de SecurityHeaders y su captura](docs/evidence/b1-securityheaders-manual.md)
-  muestran calificación **D** para la base sin hardening. El intento automático anterior
-  devolvió HTTP 403 y permanece registrado como fallo histórico, no como escaneo exitoso.
-- Entrega en dos PR abiertos y no draft, sin merge: [fuente #2](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/2)
-  `feat/firebase-cicd` → `main` (commit `3f6b763fa7d92d94823bd2be41fded8cc8825fe3`,
-  342 líneas) y [evidencia B1 #3](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/3)
-  `docs/firebase-b1-evidence` → `feat/firebase-cicd` (cierre comprobado en
-  `b6639e2`; el commit documental anterior fue `5404476`). Ambos referencian sin cerrar
-  la [issue aprobada #1](https://github.com/micaelahryhorezuk/practica-firebase-cicd/issues/1),
-  aún abierta. El commit de evidencia conserva los resultados documentales de T6–T8b.
-  En el SHA de fuente, `build_and_preview` y `Deploy Preview` terminaron SUCCESS (run
-  42503835084). El [preview de fuente](https://practica-cicd-micela--pr2-feat-firebase-cicd-zjdzsiyo.web.app)
-  respondió HTTP 200 con SHA `3f6b763` y rama correctos; `check-headers.mjs` pasó todos los
-  controles de headers y caché (exit 0). Esto no acredita interacción en navegador.
-  El [preview de evidencia](https://practica-cicd-micela--pr3-docs-firebase-b1-evi-eftmpc87.web.app)
-  también pasó CI y los controles HTTP de headers, caché y metadatos para `5404476`
-  (run 42503853409). El cierre `b6639e2` pasó CI (run 42505029051); la última consulta
-  HTTP automática falló por conexión (`ETIMEDOUT`/`ENETUNREACH`), sin confirmar identidad.
-  Las [capturas manuales de versión](docs/evidence/manual-version-verification.md) muestran
-  en `/cursos` el preview `b6639e2`/`docs/firebase-b1-evidence` y producción
-  `bc9898b`/`baseline`. No son un éxito HTTP automático ni verifican interacción.
-  La interacción en navegador sigue pendiente; merge, publicación del hardening, B5 y
-  rollback no están autorizados.
+- Login y `firebase init hosting:github` completados por la usuaria; GitHub confirmó el
+  nombre del secreto `FIREBASE_SERVICE_ACCOUNT_PRACTICA_CICD_MICELA`, no su valor.
+- La base sin hardening `bc9898b` se publicó inicialmente en
+  <https://practica-cicd-micela.web.app>. La [salida manual B1](docs/evidence/b1-manual-output.md)
+  y el [reporte manual B1](docs/evidence/b1-securityheaders-manual.md) registran calificación
+  **D** y caché `max-age=3600`. Los fallos automáticos históricos de conexión y scanner
+  HTTP 403 pertenecen a B1, no a un escaneo B5.
+- La usuaria confirmó manualmente filtro e imagen del preview. Tras restaurar live, el
+  09 Nov 2026 02:28 UTC se probó producción en navegador: el filtro `intermedio` mostró
+  2 de 6 cursos y la imagen de portada cargó a 960×320. Las [capturas anteriores de versión](docs/evidence/manual-version-verification.md)
+  muestran preview `b6639e2` y producción base `bc9898b` **antes** de los merges.
+- Con el «si» posterior de S9, [PR #2](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/2)
+  se integró normalmente a `main` en `88e0938ab783d90d28820274fe7f88cefa886da5`
+  (producción run 42534289830 SUCCESS, `Deploy al canal live` SUCCESS). Después,
+  [PR #3](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/3) se integró
+  normalmente en `c3051dc842a6de6fc15471cab8e8049c8cec5ce7` (run 42534675406
+  SUCCESS, `Deploy al canal live` SUCCESS); sin bypass, squash ni borrado de ramas.
+- [Medición B5 local](docs/evidence/b5-production.md): el script público terminó exit 0,
+  con HTML 200, headers presentes, HTML `no-cache` y JS anual `immutable`. El fetch separado
+  del footer falló (`ETIMEDOUT`, colector exit 2), pero una
+  [captura manual B5](docs/evidence/b5-manual-verification.md) muestra la URL live y el pie
+  `c3051dc`/`main` legible aunque parcialmente cortado abajo; no cambia el JSON automático.
+  Un [reporte manual B5 nuevo](docs/evidence/b5-manual-verification.md) para la URL live
+  muestra calificación **A** a 09 Nov 2026 00:04:18 UTC, frente a la **D** inicial
+  (08 Nov 2026 16:23:08 UTC). También se probó el filtro y la imagen en producción.
+  Se hizo rollback a la versión base `bc9898b` y se restauró la versión endurecida
+  `c3051dc`; el [registro B5](docs/evidence/b5-production.md) conserva los IDs de release.
+  El JSON automático conserva `securityHeadersGrade=null` y el fallo de identidad.
 
 Detalle del despliegue y su corrección de destino:
 [docs/evidence/baseline-deployment.md](docs/evidence/baseline-deployment.md).
