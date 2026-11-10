@@ -12,7 +12,7 @@
     "emulators": "firebase emulators:start --only auth,dataconnect",
     "seed": "node scripts/seed.mjs",
     "atacar": "node scripts/atacar.mjs",
-    "test": "node --test tests/headers.test.mjs tests/pipeline.test.mjs tests/rendering-accounts.test.mjs",
+    "test": "node --test tests/headers.test.mjs tests/pipeline.test.mjs tests/rendering-accounts.test.mjs tests/rendering-courses.test.mjs",
     "test:sql": "node --test tests/sql-connect.test.mjs"
   },
   "dependencies": {

@@ -28,3 +28,7 @@ La configuración web apunta a demo-catalogo. Ejecutar `npm run dev` y crear una
 ## Inscripciones propias
 
 Abrir `/mis-inscripciones` con sesión iniciada. La página consulta solamente al usuario actual y permite dar de baja sus matrículas.
+
+## Catálogo
+
+Abrir `/cursos`, filtrar e inscribirse. Los datos se leen de SQL Connect. Prueba de navegador y publicación pendientes.
