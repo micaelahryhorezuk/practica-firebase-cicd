@@ -24,3 +24,7 @@ Las salidas reales antes/después están en `docs/evidence/sql-connect/antes.txt
 ## Cuenta local
 
 La configuración web apunta a demo-catalogo. Ejecutar `npm run dev` y crear una cuenta desde Ingresar. La configuración de ejemplo no sirve para producción.
+
+## Inscripciones propias
+
+Abrir `/mis-inscripciones` con sesión iniciada. La página consulta solamente al usuario actual y permite dar de baja sus matrículas.
