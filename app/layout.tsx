@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { buildInfo } from "@/lib/build-info";
+import AuthPanel from "./components/AuthPanel";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <nav>
             <Link href="/">Inicio</Link>
             <Link href="/cursos">Cursos</Link>
+            <AuthPanel />
           </nav>
         </header>
 

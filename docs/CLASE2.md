@@ -20,3 +20,7 @@ GCLOUD_PROJECT=demo-catalogo npm run test:sql
 
 Con los mismos emuladores: `GCLOUD_PROJECT=demo-catalogo npm run atacar`.
 Las salidas reales antes/después están en `docs/evidence/sql-connect/antes.txt` y `despues.txt`; los tests RED/GREEN están en ese mismo directorio.
+
+## Cuenta local
+
+La configuración web apunta a demo-catalogo. Ejecutar `npm run dev` y crear una cuenta desde Ingresar. La configuración de ejemplo no sirve para producción.
