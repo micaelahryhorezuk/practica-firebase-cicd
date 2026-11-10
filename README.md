@@ -1,4 +1,14 @@
-# Práctica · CI/CD con Firebase Hosting y hardening de headers HTTP
+# Prácticas · Firebase Hosting y SQL Connect
+
+## Clase 2 · SQL Connect
+
+La guía local de L1–L6 y los pasos pendientes de L7 están en [docs/CLASE2.md](docs/CLASE2.md).
+Las seis respuestas y los resultados de auditoría, cuando estén disponibles, van en [REFLEXION.md](REFLEXION.md).
+La entrega de clase 1 se conserva en [REFLEXION-CLASE1.md](REFLEXION-CLASE1.md).
+
+El catálogo de clase 2 usa SQL Connect y requiere emuladores o un servicio configurado; no hay publicación ni comprobación de navegador de clase 2. Los apartados siguientes son instrucciones y evidencias **históricas de clase 1**, no pasos de despliegue de esta solución. Para probar la CSP de clase 2, usar el export servido por Hosting; `npm run dev` no aplica sus headers.
+
+# Clase 1 · CI/CD con Firebase Hosting y hardening de headers HTTP
 
 **Programación Avanzada** · Duración: 60 minutos · Plan Firebase **Spark** (sin tarjeta de crédito)
 
