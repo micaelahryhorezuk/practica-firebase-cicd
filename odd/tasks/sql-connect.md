@@ -1,20 +1,31 @@
 # SQL Connect · clase 2
-Preparar la solución local del enunciado, integrada con la clase 1.
-Publicación, PR, merge y cambios en producción no autorizados.
+Solución de clase 2 integrada con la clase 1; preparación local terminada.
+Despliegue en practica-cicd-micela autorizado sin activar facturación ni aceptar costos; push/PR/merge requieren autorización específica.
 
 ## Specs
 S1. Usuario: «tengo que hacer Clase2_lunes_SQLConnect_Enunciado.pdf»; autorización: «prepara la solicion».
 S2. L1: «clave primaria compuesta por alumno y curso, y un campo fecha que complete el servidor».
 S3. L2: «Solo para usuarios autenticados.» «La operación no puede aceptar un id de alumno como variable.» «Debe ser idempotente: inscribirse dos veces no falla ni duplica.» L3: «devuelve únicamente las inscripciones del usuario que llama»; respuesta: «alumno { nombre matriculas { fecha curso { id titulo nivel horas } } }».
 S4. L4: «Corregila con el nivel de acceso adecuado y justificá tu decisión.» L5: «Borra solo la inscripción del usuario que llama en ese curso.» Auditoría: «Salida de npm run atacar antes y después de corregir».
-S5. L6: «Agregá a connect-src solo los orígenes necesarios.» «No uses comodines amplios como https://*.googleapis.com». L7: «El frontend se publica como en la clase 1: rama, Pull Request, preview, merge.» Preparar instrucciones, sin ejecutar publicación.
+S5. L6: «Agregá a connect-src solo los orígenes necesarios.» «No uses comodines amplios como https://*.googleapis.com». L7: «El frontend se publica como en la clase 1: rama, Pull Request, preview, merge.» Preparación local completada; despliegue posterior limitado por S7.
 S6. «Respondelas en REFLEXION.md (breves y concretas)»; seis preguntas en la sección 10 del PDF original. Conservar la reflexión de clase 1.
+
+S7. Autorización de la usuaria: «ah perfecto, si autorizo», en respuesta a «¿Autorizas desplegarla en Firebase, proyecto practica-cicd-micela, sin activar facturación ni aceptar costos?». Comprobar plan/elegibilidad y migración antes de mutar producción; no aceptar una operación destructiva ni costos.
+
+S8. Enunciado: «PostgreSQL 17». El proveedor creó POSTGRES_18 en la prueba gratuita gestionada; decisión de compatibilidad por la usuaria pendiente, sin recrear recursos ni cambiar plan.
 
 ## Tasks
 T1 [done] S1: integrar material provisto conservando proyecto/workflows; inline; commits: fcc1b7e, eba6a50, ba9bc97, 8c78edc.
 T2 [done] S2–S4: esquema y operaciones, RED/GREEN y auditoría local aislada; gentle-ai-worker (context backstop); Risk: item 2 (autorización); commits: fcc1b7e, a7f3bab.
 T3 [done] S5–S6: CSP, reflexión y guía local; gentle-ai-worker (context backstop); Risk: item 2 (CSP); commit: 7207614.
 T4 [done] S1–S6: 6 tests SQL, 11 tests estáticos/renderizado, tipos, build y verificación independiente aprobados; seis slices locales y cierre documental; commit: rama feat/clase2-sql-connect-06-csp-delivery.
+
+T5 [done] S7: sesión y límite de costos comprobados; Spark sin facturación/cuenta de cobro, API SQL Connect sin uso/deshabilitada, instancia inexistente; inline y mapa de fuentes por explorador; commit: pendiente. La validación definitiva de prueba gratuita corresponde al servidor antes de provisionar.
+T6 [done] S5/S7: configuración web por worker, deploy seguro por padre; RED de producción demo observado y corregido; 13 tests/tipos/build pasan; esquema/conector desplegados con exit0 bajo prueba gratuita. Risk: item 5 (entorno/despliegue); commit: rama feat/clase2-sql-connect-07-production.
+T7 [blocked: disposición humana ante prueba independiente ejecutable no disponible] S5/S7: backend comprobado (6 controles, RUNNABLE, sql:diff vacío, 7 IDs conservados); prueba independiente estructural correcta pero suite/tipos aislados no reproducidos. Navegador/PR/merge siguen pendientes; commit: rama feat/clase2-sql-connect-07-production.
+T8 [blocked: acción de la usuaria en Firebase Console] S7: inicializar Authentication básico y habilitar correo/contraseña; GET config devolvió404 CONFIGURATION_NOT_FOUND; no habilitar Identity Platform/Blaze como alternativa.
+T9 [blocked: autorización específica para GitHub] S5/S7: consultar y publicar ramas/PR en github.com/micaelahryhorezuk/practica-firebase-cicd usando su sesión autorizada; no merge sin prueba de preview y nueva autorización.
+T10 [blocked: decisión de compatibilidad de la usuaria] S8: aceptar PostgreSQL18 de la prueba gestionada o consultar a la cátedra antes de publicar.
 
 ## Log
 L1. Solicitud original: «tengo que hacer Clase2_lunes_SQLConnect_Enunciado.pdf».
@@ -28,4 +39,14 @@ L8. Auditoría inicial: 1 vulnerabilidad y 2 controles pendientes; RED: 6 fallos
 L9. Verificador independiente: S1–S6 cumplidas para preparación local, sin bloqueantes reproducidos. Comparó preservación de workflows, CSP anterior, reflexión de clase1 y renderizado del filtro; no se ejecutó navegador. Browser runner no disponible, y producción no autorizada.
 L10. Evaluación nativa del candidato completo: nativeRisk medium, reviewDue false (under_budget); escalación item2 exigió verificador independiente, realizado. No se inició revisión nativa. Evaluación del primer commit no disponible por archivos de slices posteriores aún no rastreados; no se reintentó la misma evaluación. Los commits intermedios mantienen exactamente el código ya verificado.
 L11. Evaluación nativa del slice final 8c78edc..7207614: nativeRisk medium, reviewDue false (under_budget); no corresponde START. Spot check final: npm test 11/11, typecheck exit0; diff de app/lib/dataconnect/scripts/tests/config contra el árbol probado es vacío. No se requiere otro verificador para este cierre documental.
-L12. Preparación local terminada. Para entrega completa siguen pendientes configuración web real, habilitación de Auth, prueba manual en navegador, publicación de ramas/PR y L7; son acciones externas no autorizadas en esta preparación.
+L12. Preparación local terminada. Para entrega completa siguen pendientes configuración web real, habilitación de Auth, prueba manual en navegador, publicación de ramas/PR y L7; eran acciones externas no autorizadas durante la preparación.
+L13. Nueva autorización literal: «ah perfecto, si autorizo», para desplegar Clase 2 en practica-cicd-micela sin activar facturación ni aceptar costos. No concede push/PR/merge ni operaciones destructivas.
+L14. Consulta de documentación oficial: Spark permite una prueba de instancia de 90 días por proyecto durante toda su vida; no debe asociarse facturación. La elegibilidad real del proyecto sigue sin comprobarse. La sesión aislada .local-config no tiene cuenta autorizada. Se requiere permiso específico para utilizar/actualizar /home/micaelahryhorezuk/.config/configstore/firebase-tools.json, o un login nuevo dentro del proyecto. No se leyó ese archivo externo en esa comprobación. Después la usuaria seleccionó «Usar la sesión existente de Firebase CLI», autorizando el uso y actualización de ese archivo únicamente para el proyecto indicado, sin mostrar credenciales.
+
+L15. App web creada: 1:390346504572:web:34ee489a5b23d65c7f8cf9. Solo se añadieron cuatro campos públicos de producción; desarrollo conserva exactamente su configuración demo. RED de producción demo confirmado; GREEN del padre 13/13, typecheck y build exit0.
+L16. Deploy SQL Connect exit0, sin --force, sin --non-interactive ni respuestas automáticas. Proyecto comprobado sin facturación/cuenta de cobro inmediatamente antes. Servidor confirmó prueba gratuita; se creó catalogo/cursos y catalogo-fdc. Antes del seed, cursos/alumnos estaban vacíos; se cargó el fixture original (7 cursos,2 alumnos ficticios). Seis controles de la API real pasan sin emuladores, sin mutaciones anónimas efectivas.
+L17. Postflight inicial: PENDING_CREATE, POSTGRES_18, etiqueta ft, billingEnabled=false, sin cuenta de cobro. Estado posterior RUNNABLE confirmado con la misma etiqueta y sin facturación. Archivos production-* en docs/evidence/sql-connect. Diferencia con PostgreSQL17 del PDF visible en S8; no se recreó la instancia.
+L18. Verificador independiente de este slice: exports de desarrollo idénticos a HEAD y producción solo cambia cuatro campos autorizados; no encontró bloqueantes de implementación. Su npm test aislado tuvo 9 checks correctos y 3 archivos sin dependencias typescript/react; typecheck aislado exit127 por tsc ausente. Es prueba independiente de suite/tipos no disponible, no GREEN ni fallo del código. No se reintentó; parent 13/13, typecheck/build pasan. Probes de entornos ya quedan cubiertos por las dos reglas públicas retenidas, sin añadir casos ajenos.
+L19. Authentication no inicializado (404 CONFIGURATION_NOT_FOUND). Frontend sin publicar, sin reads/push/PR/merge en GitHub. Se requiere acción de la usuaria en Console y autorización de publicación; no se considera terminada la entrega completa.
+
+L20. Instancia RUNNABLE confirmada; sql:diff exit0, diffs vacíos, catálogo conserva los7IDs después de la provisión. Se registra production-instance-ready.json, production-sql-diff.txt y production-after-ready.json. Solo se quitó un espacio final del log copiado de deploy para git diff --check; el log crudo permanece en .local-cache. Fallo de formato corregido, sin alterar contenido semántico.

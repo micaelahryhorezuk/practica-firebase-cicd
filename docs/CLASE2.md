@@ -19,7 +19,7 @@ GCLOUD_PROJECT=demo-catalogo npm run seed
 npm run dev
 ```
 
-La configuración de `lib/firebase-config.ts` apunta a `demo-catalogo` para esta ejecución aislada. Los campos de ejemplo de apiKey/appId sirven solamente con emuladores. Abrir <http://localhost:3000/cursos>, crear una cuenta, inscribirse, consultar Mis inscripciones y darse de baja. `npm run dev` no aplica los headers de Hosting: la lógica local se prueba allí con Auth y Data Connect emulados. Para inspeccionar el header CSP se necesita el export servido por Hosting; las conexiones del navegador a emuladores en otros puertos no están permitidas por esta lista de orígenes de producción. No ampliar la CSP de producción para hacer funcionar esos puertos.
+En desarrollo, `lib/firebase-config.ts` mantiene los cuatro valores de `demo-catalogo` para esta ejecución aislada. Los campos de ejemplo de apiKey/appId sirven solamente con emuladores. En producción, el módulo ya contiene los cuatro valores públicos de la app web de `practica-cicd-micela`; esto no demuestra que Auth, el despliegue o el flujo en navegador funcionen. Abrir <http://localhost:3000/cursos>, crear una cuenta, inscribirse, consultar Mis inscripciones y darse de baja. `npm run dev` no aplica los headers de Hosting: la lógica local se prueba allí con Auth y Data Connect emulados. Para inspeccionar el header CSP se necesita el export servido por Hosting; las conexiones del navegador a emuladores en otros puertos no están permitidas por esta lista de orígenes de producción. No ampliar la CSP de producción para hacer funcionar esos puertos.
 
 En una tercera terminal, con esos mismos emuladores y datos, ejecutar las comprobaciones cuando la implementación esté lista:
 
@@ -48,25 +48,24 @@ La fecha es un valor por defecto al insertar: repetir el upsert sin enviar fecha
 
 ## Producción y entrega pendientes (L7)
 
-Estos pasos requieren tu autorización y acceso a tu proyecto. No fueron ejecutados por preparar la solución:
+### Completado con autorización posterior
 
-1. En Firebase Console, habilitar Authentication → Correo electrónico/contraseña.
-2. Copiar la configuración **web pública** del proyecto a `lib/firebase-config.ts`; debe coincidir con `.firebaserc`. No usar credenciales de service account en el navegador.
-3. Revisar las condiciones vigentes y la elegibilidad de la prueba de Cloud SQL en la consola. No asumir costo cero ni activar facturación sin comprobarlo.
-4. Con sesión autorizada del CLI, inspeccionar la migración:
-   ```bash
-   npx firebase dataconnect:sql:diff
-   npx firebase deploy --only dataconnect
-   ```
-   Revisar el SQL y las confirmaciones antes de aceptarlas.
-5. Si corresponde cargar los cursos iniciales, revisar `dataconnect/seed_data.gql` antes de ejecutar:
-   ```bash
-   npx firebase dataconnect:execute dataconnect/seed_data.gql
-   ```
-   El archivo también carga dos alumnos ficticios; decidir si corresponde incluirlos en producción. No reemplazar datos existentes inadvertidamente.
-6. Publicar la rama mediante PR y revisar su preview. Los workflows y el proyecto de clase 1 se mantienen. No hacer merge hasta probar registro, inscripción y baja en el preview.
-7. En el navegador, con el build de producción, comprobar Network y consola: solicitudes a Auth/SQL Connect sin errores CSP. Revisar también el filtro, la imagen de portada y la identidad del build.
-8. Solo después, autorizar el merge y comprobar <https://practica-cicd-micela.web.app>.
+- Proyecto `practica-cicd-micela`: facturación desactivada y sin cuenta de cobro asociada, comprobado antes del despliegue. No se activó Blaze.
+- App web registrada. `lib/firebase-config.ts` usa sus cuatro valores públicos en producción y conserva `demo-catalogo` en desarrollo; no contiene credenciales administrativas.
+- `firebase deploy --only dataconnect --project practica-cicd-micela`: exit 0. Esquema y conector `catalogo/cursos` publicados bajo la prueba gratuita. El CLI informó creación de Cloud SQL y uso temporal de una base de datos mientras se completa; no se afirma que una migración física omitida durante esa creación ya haya terminado.
+- Base nueva vacía comprobada antes del seed. Se cargó el archivo original del enunciado: 7 cursos y 2 alumnos ficticios. No volver a sembrar automáticamente una base con datos.
+- API real, sin emuladores: 7 cursos públicos; ListAlumnos, MisInscripciones, Inscribirme y DarmeDeBaja rechazadas sin token; catálogo sin cambios tras esos rechazos.
+- Pruebas del padre: `npm test` 13/13; tipos y build correctos. El verificador independiente confirmó el diferencial de exports y la configuración/costos, sin bloqueantes de implementación. Su suite/tipos aislados no pudieron reproducirse por dependencias `typescript`/`react` y ejecutable `tsc` ausentes: no se cuentan como una segunda ejecución aprobada. Esto tampoco acredita interacción en navegador.
+
+Evidencias: [preflight](evidence/sql-connect/production-preflight.json), [deploy](evidence/sql-connect/production-deploy.txt), [seed](evidence/sql-connect/production-seed.json), [controles públicos](evidence/sql-connect/production-public-check.json) y [estado de Auth](evidence/sql-connect/production-auth-status.json). El [estado posterior](evidence/sql-connect/production-postflight.json) confirma que sigue sin facturación y que la instancia tiene etiqueta de prueba `ft`. En esa lectura estaba `PENDING_CREATE`; [la comprobación posterior](evidence/sql-connect/production-instance-ready.json) confirmó `RUNNABLE`, manteniendo prueba `ft` y sin cuenta de cobro. Después, [sql:diff](evidence/sql-connect/production-sql-diff.txt) terminó con exit 0 y `diffs: []`, y [la consulta posterior](evidence/sql-connect/production-after-ready.json) conservó los siete IDs de cursos. No se aplicó ninguna migración destructiva. El proveedor provisionó **PostgreSQL 18**, aunque el PDF menciona 17; es la versión predeterminada del CLI instalado en la prueba gestionada. No se cambió de plan ni se intentó recrear la instancia para forzar otra versión.
+
+### Pendiente para completar la entrega
+
+1. Abrir [Authentication del proyecto](https://console.firebase.google.com/project/practica-cicd-micela/authentication/providers), pulsar Comenzar si aparece y habilitar Correo electrónico/contraseña en Firebase Authentication básico. La consulta actual devuelve 404 `CONFIGURATION_NOT_FOUND`. No habilitar Identity Platform ni Blaze.
+2. Autorizar por separado el push y los PR en GitHub. Publicar la rama mediante el flujo de PR/preview de clase 1; no hacer merge hasta comprobar registro, inscripción y baja en el preview.
+3. En navegador, revisar Network y consola para confirmar CSP y conexiones; comprobar también cambio de cuenta, filtro, imagen de portada e identidad del build. No hay prueba de navegador disponible en esta sesión.
+4. Solo tras esa comprobación y autorización de merge, revisar <https://practica-cicd-micela.web.app>. No se ha desplegado el frontend de clase 2 en Hosting.
+5. La inspección `npx firebase dataconnect:sql:diff --project practica-cicd-micela --service catalogo --location us-east4` ya confirmó cero diferencias. Ante cambios futuros, revisar el SQL antes de migrar; no ejecutar operaciones destructivas ni aceptar costos como alternativa.
 
 ## CSP
 

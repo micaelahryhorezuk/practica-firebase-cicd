@@ -1,7 +1,7 @@
 # Reflexión · SQL Connect (clase 2)
 
 Solución integrada con el proyecto de clase 1. La reflexión anterior se conserva en [REFLEXION-CLASE1.md](REFLEXION-CLASE1.md).
-El despliegue, el PR y la prueba en producción están pendientes; no se presentan como realizados.
+El backend SQL Connect fue desplegado con autorización posterior y se comprobó su API pública. El frontend de clase 2, el PR y la prueba de inscripción en navegador siguen pendientes; no se presentan como realizados.
 
 ## 1. Identidad e IDOR
 
@@ -47,13 +47,14 @@ Se registran aquí las salidas observadas de `npm run atacar`, antes y después 
 
 - Antes: [salida real](docs/evidence/sql-connect/antes.txt): el catálogo devuelve 7 cursos; ListAlumnos filtra datos personales sin login; faltan las operaciones de inscripción. Resultado: **1 vulnerabilidad y 2 controles pendientes**.
 - Después: [salida real](docs/evidence/sql-connect/despues.txt): **Todos los controles pasaron**, sin vulnerabilidades ni pendientes. ListAlumnos se rechaza, la inscripción anónima se rechaza, la repetición no falla y se comprueba el aislamiento entre A y B.
-- Pruebas de integración: [salida GREEN](docs/evidence/sql-connect/green.txt), **6/6 pasan**, exit 0. [RED original](docs/evidence/sql-connect/red.txt): 6 fallos por operaciones aún inexistentes. Tras completar la solución, también pasan `npm test` (11/11, incluidas las regresiones de renderizado y cambio de cuenta), `npm run typecheck` y `npm run build` (export estático de las cuatro rutas).
+- Pruebas de integración: [salida GREEN](docs/evidence/sql-connect/green.txt), **6/6 pasan**, exit 0. [RED original](docs/evidence/sql-connect/red.txt): 6 fallos por operaciones aún inexistentes. Tras completar la solución, también pasan `npm test` (13/13, incluidas configuración por entorno y regresiones de renderizado/cambio de cuenta), `npm run typecheck` y `npm run build` (export estático de las cuatro rutas).
 - CSP: RED observado antes del cambio; después pasan las **9 pruebas de headers y pipeline**. La comprobación en navegador con Hosting sigue pendiente.
-- Producción: no desplegada por esta solución.
+- Backend de producción: [deploy exitoso](docs/evidence/sql-connect/production-deploy.txt) bajo prueba gratuita, sin activar facturación. [API real](docs/evidence/sql-connect/production-public-check.json): 7 cursos y 4 operaciones privadas rechazadas sin token; catálogo sin cambios tras los rechazos. El seed se ejecutó solo tras comprobar base vacía y cargó 7 cursos y 2 alumnos ficticios. Al principio el CLI usó base temporal; después [Cloud SQL quedó RUNNABLE](docs/evidence/sql-connect/production-instance-ready.json), [sql:diff no encontró diferencias](docs/evidence/sql-connect/production-sql-diff.txt) y se conservaron los siete IDs de cursos. El proveedor usa PostgreSQL18 frente a17 del enunciado; esa diferencia está documentada y pendiente de confirmación.
+- Pendiente: [Auth aún sin inicializar](docs/evidence/sql-connect/production-auth-status.json), frontend de clase 2 no publicado y flujo completo no probado en navegador.
 
 ## Entrega pendiente
 
 - Repositorio existente: <https://github.com/micaelahryhorezuk/practica-firebase-cicd>.
 - PR de clase 2 mergeado: pendiente.
 - URL objetivo: <https://practica-cicd-micela.web.app>; inscripción de clase 2 todavía no verificada allí.
-- Configuración web real de Firebase, habilitación de Auth y L7: [pasos de entrega](docs/CLASE2.md#producción-y-entrega-pendientes-l7).
+- Habilitación de Auth, publicación del frontend y cierre de L7: [pasos de entrega](docs/CLASE2.md#producción-y-entrega-pendientes-l7).
