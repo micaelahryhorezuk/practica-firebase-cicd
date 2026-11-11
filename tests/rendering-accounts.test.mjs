@@ -76,3 +76,24 @@ test("Enrollment never writes a matricula when profile initialization fails", as
   await assert.rejects(enroll("course-a"), /profile unavailable/);
   assert.deepEqual(calls, ["UpsertAlumno"]);
 });
+
+test("Enrollment waits for delayed profile initialization", async () => {
+  const calls = [];
+  let release;
+  const ready = new Promise(resolve => { release = resolve; });
+  const enroll = loadComponent("lib/sqlconnect.ts", {
+    "./firebase": { firebase: () => ({ dc: {}, auth: { currentUser: { displayName: "Student A" } } }) },
+    "firebase/data-connect": {
+      queryRef: () => ({}),
+      mutationRef: (_dc, name) => name,
+      executeQuery: async () => ({ data: { alumno: null } }),
+      executeMutation: async name => { calls.push(name); if (name === "UpsertAlumno") await ready; },
+    },
+  }, "inscribirme");
+  const pending = enroll("course-a");
+  await new Promise(resolve => setImmediate(resolve));
+  assert.deepEqual(calls, ["UpsertAlumno"]);
+  release();
+  await pending;
+  assert.deepEqual(calls, ["UpsertAlumno", "Inscribirme"]);
+});
