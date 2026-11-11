@@ -1,6 +1,6 @@
 # Clase 2 · seguimiento de revisión
 
-Este es el índice de una cadena de PR. El tracker debe permanecer **draft / no merge** hasta revisar e integrar los hijos. La publicación live requiere autorización posterior.
+Los siete PR hijos (#7–#13) fueron integrados con merge commits y CI aprobada para cada cabeza exacta. La usuaria autorizó merge y publicación live, sin facturación ni borrado de recursos. El tracker #6 es la integración final a main; su workflow publica Hosting.
 
 ## Base y alcance
 
@@ -33,9 +33,9 @@ El hijo 1 apunta al tracker; cada hijo posterior apunta al padre inmediato. El t
 - PostgreSQL18 de la prueba gestionada aceptado por la usuaria frente a17 del PDF.
 - Revisión nativa del slice7 aprobada y reconocida; no sustituye las pruebas funcionales.
 - La suite independiente no pudo ejecutarse completa por dependencias faltantes en su aislamiento; se conserva esa limitación. El diferencial independiente de configuración sí pasó.
-- Auth está pendiente de confirmar: la usuaria informó habilitación, pero el endpoint público del SDK devuelve CONFIGURATION_NOT_FOUND para este proyecto.
-- Faltan prueba de navegador/preview y autorización de merge/live.
+- Auth confirmado: registro, ingreso, inscripción y baja funcionan en Chromium en el preview integrado. La evidencia inicial CONFIGURATION_NOT_FOUND quedó superada por la configuración posterior.
+- Diez comprobaciones de navegador aprobadas; ver [evidencia](evidence/sql-connect/preview-browser.json). La validación live se realiza después del deploy.
 
 ## Integración posterior
 
-Revisar hijos en orden y mantener las bases sin contaminación. No borrar la instancia para hacer rollback: la prueba gratuita es única por proyecto. Las operaciones de merge, eliminación de ramas/recursos o cambios de plan no están autorizadas.
+Hijos integrados del último al primero, conservando las bases originales, sin borrar ramas. El árbol funcional del tracker coincide con el preview probado9234403. Antes de integrar #6 se exige CI aprobada para su cabeza exacta. No borrar la instancia ni cambiar de plan: la prueba gratuita es única por proyecto. No se autorizó borrar recursos ni activar facturación.

@@ -19,5 +19,9 @@
   ],
   "build": "npm run build exit0 outside sandbox; sandbox subprocess EPERM caused earlier false build diagnosis",
   "localChecks": "npm test: 5 test files pass; npm run typecheck exit0",
-  "liveVerified": false
+  "liveVerified": false,
+  "browserConsole": {
+    "functionalErrors": 0,
+    "nonBlocking": "favicon.ico returns404; confirmed by Chromium Log.entryAdded URL"
+  }
 }
