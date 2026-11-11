@@ -59,13 +59,13 @@ La fecha es un valor por defecto al insertar: repetir el upsert sin enviar fecha
 
 Evidencias: [preflight](evidence/sql-connect/production-preflight.json), [deploy](evidence/sql-connect/production-deploy.txt), [seed](evidence/sql-connect/production-seed.json), [controles públicos](evidence/sql-connect/production-public-check.json) y [estado de Auth](evidence/sql-connect/production-auth-status.json). El [estado posterior](evidence/sql-connect/production-postflight.json) confirma que sigue sin facturación y que la instancia tiene etiqueta de prueba `ft`. En esa lectura estaba `PENDING_CREATE`; [la comprobación posterior](evidence/sql-connect/production-instance-ready.json) confirmó `RUNNABLE`, manteniendo prueba `ft` y sin cuenta de cobro. Después, [sql:diff](evidence/sql-connect/production-sql-diff.txt) terminó con exit 0 y `diffs: []`, y [la consulta posterior](evidence/sql-connect/production-after-ready.json) conservó los siete IDs de cursos. No se aplicó ninguna migración destructiva. El proveedor provisionó **PostgreSQL 18**, aunque el PDF menciona 17; la usuaria aceptó mantener la versión de la prueba gestionada sin cambiar de plan ni recrear la instancia.
 
-### Pendiente para completar la entrega
+### Verificación de navegador y cierre
 
-1. Configuración básica de Auth confirmada: nueva captura muestra Correo/Contraseña Habilitada y `GET /v1/projects` responde HTTP200 para el proyecto390346504572, correspondiente a practica-cicd-micela. [Evidencia normalizada](evidence/sql-connect/auth-sdk-ready.json); la imagen privada no se publica. El endpoint no informa el flag del proveedor: ese estado se observa en la captura. Falta probar registro/ingreso, inscripción, Mis inscripciones y baja en el preview; no se presentan como comprobados. No activar Identity Platform/Blaze.
-2. La usuaria autorizó consulta, push y PR de revisión en GitHub, sin merge. Mantener el flujo de PR/preview de clase 1 y la cadena elegida; no hacer merge hasta comprobar registro, inscripción y baja en el preview. El alcance de Clase2 debe estar vinculado a un issue aprobado antes de abrir los PR.
-3. [HTTP del preview integrado](evidence/sql-connect/preview-http.json) y [headers/caché](evidence/sql-connect/preview-headers.txt) pasan: `/cursos` devuelve200, CSP contiene solo los tres orígenes de Firebase más self, y el footer identifica SHA9234403/rama07. Esto no ejecuta JavaScript ni prueba navegador. Falta revisar Network/consola, registro/inscripción/baja, cambio de cuenta, filtro e imagen; no hay runner de navegador disponible en esta sesión.
-4. Solo tras esa comprobación y autorización de merge, revisar <https://practica-cicd-micela.web.app>. No se ha desplegado el frontend de clase 2 en Hosting.
-5. La inspección `npx firebase dataconnect:sql:diff --project practica-cicd-micela --service catalogo --location us-east4` ya confirmó cero diferencias. Ante cambios futuros, revisar el SQL antes de migrar; no ejecutar operaciones destructivas ni aceptar costos como alternativa.
+El 2026-11-11 se comprobó el preview integrado con Chromium real: catálogo de siete cursos, filtro inicial de dos, registro, inscripción, consulta propia, cierre de sesión, aislamiento de una segunda cuenta, reingreso y baja. [Evidencia](evidence/sql-connect/preview-browser.json). Se usaron cuentas ficticias, conservadas sin publicar credenciales; un primer intento incompleto dejó una matrícula ficticia. No se alteraron registros de usuarios existentes. La ruta `/cursos` no contiene imágenes.
+
+El build local y typecheck pasan; `npm test` informa cinco archivos aprobados en este entorno. El error anterior del build era EPERM al lanzar TypeScript en el sandbox, no una configuración inválida: fuera de esa restricción termina con exit 0 sin cambiar código.
+
+La usuaria autorizó integrar los PR y publicar Hosting después de estas comprobaciones, sin activar facturación ni borrar recursos. Integración y comprobación live siguen en curso; no se presentan todavía como completadas. No se ejecuta auditoría, seed ni migración contra producción.
 
 ## CSP
 
@@ -75,7 +75,7 @@ Evidencias: [preflight](evidence/sql-connect/production-preflight.json), [deploy
 - `securetoken.googleapis.com`: renovación del token de Auth.
 - `firebasedataconnect.googleapis.com`: operaciones del conector.
 
-El SDK instalado de Data Connect construye sus URLs con `firebasedataconnect.googleapis.com`. No se autoriza `*.googleapis.com`, ya que permitiría servicios que la app no necesita. Esto cubre el flujo email/contraseña del enunciado, no agrega proveedores OAuth. Se conserva la política de scripts de clase 1, incluida su concesión documentada `'unsafe-inline'`; endurecerla con hashes sería un trabajo distinto. El test estructural de `firebase.json` no demuestra que el navegador complete la conexión: queda pendiente probar Network y consola en un preview autorizado con configuración real de Auth y Data Connect. No se afirma que el flujo funcione en navegador bajo la CSP antes de esa prueba.
+El SDK instalado de Data Connect construye sus URLs con `firebasedataconnect.googleapis.com`. No se autoriza `*.googleapis.com`, ya que permitiría servicios que la app no necesita. Esto cubre el flujo email/contraseña del enunciado, no agrega proveedores OAuth. Se conserva la política de scripts de clase 1, incluida su concesión documentada `'unsafe-inline'`; endurecerla con hashes sería un trabajo distinto. El test estructural no basta por sí solo; el flujo de Auth e inscripción bajo esta CSP fue comprobado en Chromium en el preview integrado, según la evidencia enlazada.
 
 ## Entregables
 

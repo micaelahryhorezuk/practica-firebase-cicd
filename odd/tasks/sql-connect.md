@@ -1,6 +1,6 @@
 # SQL Connect · clase 2
 Solución de clase 2 integrada con la clase 1; preparación local terminada.
-Despliegue en practica-cicd-micela autorizado sin facturación/costos; consulta/push/PR de revisión en GitHub autorizados posteriormente. Merge y publicación live no autorizados.
+Despliegue en practica-cicd-micela autorizado sin facturación/costos; consulta/push/PR de revisión en GitHub autorizados posteriormente. Merge y publicación live autorizados el 2026-11-11, condicionados a build y flujo de navegador aprobados; sin facturación ni borrado de recursos.
 
 ## Specs
 S1. Usuario: «tengo que hacer Clase2_lunes_SQLConnect_Enunciado.pdf»; autorización: «prepara la solicion».
@@ -15,6 +15,8 @@ S7. Autorización de la usuaria: «ah perfecto, si autorizo», en respuesta a «
 S8. Enunciado original: «PostgreSQL 17». El proveedor creó POSTGRES_18; la usuaria eligió «Mantener PostgreSQL 18 sin cambiar de plan», documentando esa diferencia sin recrear recursos.
 S9. La usuaria eligió «Autorizar consulta, push y PR; sin merge» para github.com/micaelahryhorezuk/practica-firebase-cicd, usando sesión gh y lectura de /home/micaelahryhorezuk/.config/gh/hosts.yml y config.yml sin mostrar credenciales. Se publicarán solo ramas/PR de revisión, sin merge ni publicación live.
 
+S10. Usuario: «haz lo que haga falta» y «si», en respuesta a «¿Autorizas usar tus sesiones configuradas de GitHub y Firebase para integrar los PR de clase 2 y publicar en practica-cicd-micela, únicamente después de corregir el build y verificar el flujo, sin activar facturación ni borrar recursos?»
+
 ## Tasks
 T1 [done] S1: integrar material provisto conservando proyecto/workflows; inline; commits: fcc1b7e, eba6a50, ba9bc97, 8c78edc.
 T2 [done] S2–S4: esquema y operaciones, RED/GREEN y auditoría local aislada; gentle-ai-worker (context backstop); Risk: item 2 (autorización); commits: fcc1b7e, a7f3bab.
@@ -28,6 +30,8 @@ T8 [done] S7: proveedor Habilitada en captura y SDK público HTTP200/proyecto390
 T9 [done] S5/S7/S9: issue5 aprobado y confirmado; tracker draft6 y siete hijos draft7..13 confirmados con readback de body, tipo único, bases y rutas de diff. Refs#5 no cerrante; sin merge/live.
 T10 [done] S8: PostgreSQL18 de la prueba gratuita aceptado por la usuaria sin cambio de plan.
 T11 [done] S5/S7/S9: ocho runs CI/preview success para SHA exactos, metadatos de ocho PR confirmados; HTTP/headers/CSP/caché/footer del preview integrado pasan para9234403. No se reiniciaron runs ni se probó navegador.
+
+T12 [in progress] S5/S10: inline; confirmar build, navegador, integración encadenada y publicación live. Build exit0 fuera del sandbox; GitHub confirma ocho CI success. Sin cambios de código previstos.
 
 ## Log
 L1. Solicitud original: «tengo que hacer Clase2_lunes_SQLConnect_Enunciado.pdf».
@@ -92,3 +96,7 @@ L40. Captura proporcionada por la usuaria y leída solo desde el archivo selecci
 L41. Nueva captura seleccionada por la usuaria muestra la fila Correo electrónico/contraseña en estado Habilitada. Se leyó solo ese archivo y no se copió/publicó la imagen. Ante este cambio de evidencia se hizo una única consulta nueva al SDK público: HTTP200, projectId390346504572 y dominios de practica-cicd-micela. No devuelve flag email/password ni se usa como prueba de registro; el estado del proveedor se evidencia en la captura. No se modificó otro proveedor ni el plan. Próximo resultado requerido: prueba humana de cuenta/inscripción/baja en preview.
 
 L42. Actualización de estado Auth en bodies PR6..13 confirmada mediante readback: cabezas, draft/OPEN y tipo único conservados. No se tocaron checkboxes de prueba manual ni se publicó la captura. T8 completada como configuración, no como prueba de registro. Continúa T7 con validación humana del flujo en preview; no hay nueva autorización de merge/live. Evidencia/notes locales, remoto9234403 congelado.
+
+L43. 2026-11-11. Usuario: «haz lo que haga falta»; autorización final «si» al alcance S10. npm test 5 archivos aprobados, typecheck exit0. Build falló en sandbox por EPERM de subprocesos y stdout vacío; ejecución autorizada fuera del sandbox exit0 sin cambios de código. No es un defecto de tsconfig. Engram no disponible; mirror pendiente. Chromium instalado permite inspección CDP sin instalar dependencias.
+
+L44. Chromium/CDP: diez comprobaciones aprobadas en preview9234403 (catálogo7, filtro2, registroA/B, inscripciónA, lista propia, salida oculta lista, B vacío, reingresoA, bajaA). Un primer intento de automatización no seleccionó la pestaña Ingresar; corregido el runner, no la app. Cuentas ficticias conservadas; una matrícula del intento incompleto permanece. Verificador independiente confirmó igualdad de runtime/config con9234403 y propagación segura13→12→…→7→6 por merge commits sin borrar ramas. Antes del merge6 se exige CI exacta y comparación de árbol; después, prueba live.
