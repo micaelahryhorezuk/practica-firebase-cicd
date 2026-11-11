@@ -29,3 +29,6 @@ dataconnect/.dataconnect/
 # varios
 .env*.local
 .DS_Store
+
+# Local development tracking
+odd/
