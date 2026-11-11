@@ -46,7 +46,7 @@ Los usuarios y matrículas de estas pruebas quedan solo en el emulador. No ejecu
 
 La fecha es un valor por defecto al insertar: repetir el upsert sin enviar fecha conserva la fecha original. El cliente no envía ni UID, ni email, ni fecha para una matrícula. `@default` por sí solo no impide una escritura arbitraria de administrador: la protección del cliente está en las operaciones expuestas y sus expresiones.
 
-## Producción y entrega pendientes (L7)
+## Producción y entrega (L7)
 
 ### Completado con autorización posterior
 
@@ -65,7 +65,7 @@ El 2026-11-11 se comprobó el preview integrado con Chromium real: catálogo de 
 
 El build local y typecheck pasan; `npm test` informa cinco archivos aprobados en este entorno. El error anterior del build era EPERM al lanzar TypeScript en el sandbox, no una configuración inválida: fuera de esa restricción termina con exit 0 sin cambiar código.
 
-La usuaria autorizó integrar los PR y publicar Hosting después de estas comprobaciones, sin activar facturación ni borrar recursos. Integración y comprobación live siguen en curso; no se presentan todavía como completadas. No se ejecuta auditoría, seed ni migración contra producción.
+La usuaria autorizó integrar los PR y publicar Hosting después de estas comprobaciones, sin activar facturación ni borrar recursos. Los PR #6–#14 están integrados. El deploy corregido terminó con éxito y las doce comprobaciones de Chromium en live pasaron, incluida la imagen de portada; [evidencia final](evidence/sql-connect/live-browser.json). No se ejecuta auditoría, seed ni migración contra producción.
 
 ## CSP
 
@@ -79,12 +79,12 @@ El SDK instalado de Data Connect construye sus URLs con `firebasedataconnect.goo
 
 ## Entregables
 
-- Código publicado para revisión: [rama integrada del último hijo](https://github.com/micaelahryhorezuk/practica-firebase-cicd/tree/feat/clase2-sql-connect-07-production). Aún no integrado a main.
-- Salidas reales antes/después de `npm run atacar`: [REFLEXION.md](../REFLEXION.md).
-- [Issue aprobado #5](https://github.com/micaelahryhorezuk/practica-firebase-cicd/issues/5), [tracker draft #6](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/6), hijos #7–#13. [CSP #12](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/12) y los demás siguen sin merge; aprobación posterior necesaria.
-- [Ocho workflows CI/preview](evidence/sql-connect/ci-previews.json) aprobadas para sus SHA exactos. Ejecutan instalación, typecheck, build y deploy, no los 13 tests unitarios. [Preview integrado #13](https://practica-cicd-micela--pr13-feat-clase2-sql-conn-pigrmg72.web.app/cursos); no constituye prueba de navegador ni live.
-- URL de producción con inscripción: pendiente de L7.
-- Seis respuestas: [REFLEXION.md](../REFLEXION.md).
+- [Código integrado en main](https://github.com/micaelahryhorezuk/practica-firebase-cicd).
+- [Aplicación publicada](https://practica-cicd-micela.web.app): registro, ingreso, inscripción, aislamiento y baja verificados en Chromium; imagen de portada cargada.
+- [PR de integración #6](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/6) y [corrección #14](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/14), ambos integrados. Hijos #7–#13 integrados con CI exacta aprobada.
+- Salidas reales de auditoría y seis respuestas: [REFLEXION.md](../REFLEXION.md); reflexión histórica en [REFLEXION-CLASE1.md](../REFLEXION-CLASE1.md).
+- [Verificación final y límites](evidence/sql-connect/live-browser.json): 17 pruebas locales, typecheck/build aprobados, verificación independiente y doce comprobaciones live. Auditoría SQL histórica conservada, no ejecutada contra producción. No se activó facturación ni se cambió el esquema.
+- Único aviso observado en la prueba live final: `/favicon.ico` devuelve404; no afecta la aplicación.
 
 ## Regresión de perfil pendiente al registrarse
 
