@@ -1,0 +1,103 @@
+{
+  "repository": "https://github.com/micaelahryhorezuk/practica-firebase-cicd",
+  "issue": "https://github.com/micaelahryhorezuk/practica-firebase-cicd/issues/5",
+  "workflow": "Preview en Pull Request",
+  "workflowSteps": [
+    "npm ci",
+    "npm run typecheck",
+    "npm run build",
+    "Firebase Hosting preview"
+  ],
+  "unitTestsExecutedByWorkflow": false,
+  "allEightWorkflowsSuccess": true,
+  "pullRequestsDraft": true,
+  "mergePerformed": false,
+  "liveFrontendPublished": false,
+  "prs": [
+    {
+      "number": 6,
+      "pr": "https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/6",
+      "run": "https://github.com/micaelahryhorezuk/practica-firebase-cicd/actions/runs/42933311775",
+      "sha": "bf1ff5e978ab2c5cffac612600405b2c636b393d",
+      "conclusion": "success",
+      "previewUrls": [
+        "https://practica-cicd-micela--pr6-feat-clase2-sql-conn-hut38363.web.app"
+      ]
+    },
+    {
+      "number": 7,
+      "pr": "https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/7",
+      "run": "https://github.com/micaelahryhorezuk/practica-firebase-cicd/actions/runs/42933329701",
+      "sha": "fcc1b7e1069eb386744a42974fffb7617269c8a2",
+      "conclusion": "success",
+      "previewUrls": [
+        "https://practica-cicd-micela--pr7-feat-clase2-sql-conn-8zh4s5mv.web.app"
+      ]
+    },
+    {
+      "number": 8,
+      "pr": "https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/8",
+      "run": "https://github.com/micaelahryhorezuk/practica-firebase-cicd/actions/runs/42933348943",
+      "sha": "a7f3bab495f0444fe52963d4de6ead01f67d3462",
+      "conclusion": "success",
+      "previewUrls": [
+        "https://practica-cicd-micela--pr8-feat-clase2-sql-conn-5t010ybn.web.app"
+      ]
+    },
+    {
+      "number": 9,
+      "pr": "https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/9",
+      "run": "https://github.com/micaelahryhorezuk/practica-firebase-cicd/actions/runs/42933363041",
+      "sha": "eba6a5008f23065c3def40717cfb1b90923a0214",
+      "conclusion": "success",
+      "previewUrls": [
+        "https://practica-cicd-micela--pr9-feat-clase2-sql-conn-4uzf35th.web.app"
+      ]
+    },
+    {
+      "number": 10,
+      "pr": "https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/10",
+      "run": "https://github.com/micaelahryhorezuk/practica-firebase-cicd/actions/runs/42933397760",
+      "sha": "ba9bc97aa7d5588d938848570b530444901eee55",
+      "conclusion": "success",
+      "previewUrls": [
+        "https://practica-cicd-micela--pr10-feat-clase2-sql-conn-ofunvahu.web.app"
+      ]
+    },
+    {
+      "number": 11,
+      "pr": "https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/11",
+      "run": "https://github.com/micaelahryhorezuk/practica-firebase-cicd/actions/runs/42933420614",
+      "sha": "8c78edccf208c0525f0781a93f087f2771c934ab",
+      "conclusion": "success",
+      "previewUrls": [
+        "https://practica-cicd-micela--pr11-feat-clase2-sql-conn-xwkmszl1.web.app"
+      ]
+    },
+    {
+      "number": 12,
+      "pr": "https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/12",
+      "run": "https://github.com/micaelahryhorezuk/practica-firebase-cicd/actions/runs/42933464175",
+      "sha": "ab9cccc34ea674275c31847ab8de5a4b74e77a3b",
+      "conclusion": "success",
+      "previewUrls": [
+        "https://practica-cicd-micela--pr12-feat-clase2-sql-conn-nhnpj1bm.web.app"
+      ]
+    },
+    {
+      "number": 13,
+      "pr": "https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/13",
+      "run": "https://github.com/micaelahryhorezuk/practica-firebase-cicd/actions/runs/42933481239",
+      "sha": "9234403571a63f521fbf0723ce013d0c484c6564",
+      "conclusion": "success",
+      "previewUrls": [
+        "https://practica-cicd-micela--pr13-feat-clase2-sql-conn-pigrmg72.web.app"
+      ]
+    }
+  ],
+  "limitations": [
+    "No browser interaction performed",
+    "Authentication public SDK config last returned CONFIGURATION_NOT_FOUND",
+    "Independent isolated npm test suite was unavailable; parent npm test passed13/13"
+  ]
+}

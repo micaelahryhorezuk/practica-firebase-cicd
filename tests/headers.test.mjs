@@ -40,6 +40,17 @@ test("B3: CSP limita orígenes, permite hidratación y bloquea objetos e iframes
   assert.ok(!csp.includes("'unsafe-eval'"));
 });
 
+test("L6: connect-src permite únicamente Auth y SQL Connect con orígenes exactos", () => {
+  const csp = headersFor("**")["Content-Security-Policy"];
+  const connect = csp.split(";").find((s) => s.trim().startsWith("connect-src "))?.trim().split(/\s+/).slice(1);
+  assert.deepEqual(connect, [
+    "'self'",
+    "https://identitytoolkit.googleapis.com",
+    "https://securetoken.googleapis.com",
+    "https://firebasedataconnect.googleapis.com",
+  ]);
+});
+
 test("B4: HTML revalida y los assets versionados sobreescriben la regla general", () => {
   assert.equal(headersFor("**")["Cache-Control"], "no-cache");
   assert.equal(headersFor("/_next/static/**")["Cache-Control"], "public, max-age=31536000, immutable");

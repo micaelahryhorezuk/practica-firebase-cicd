@@ -1,0 +1,16 @@
+{
+  "url": "https://practica-cicd-micela--pr13-feat-clase2-sql-conn-pigrmg72.web.app/cursos",
+  "httpStatus": 200,
+  "testedCommit": "9234403571a63f521fbf0723ce013d0c484c6564",
+  "buildSha": "9234403",
+  "branch": "feat/clase2-sql-connect-07-production",
+  "csp": "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self'; img-src 'self' https://picsum.photos https://fastly.picsum.photos; connect-src 'self' https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebasedataconnect.googleapis.com; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'",
+  "connectSrc": [
+    "'self'",
+    "https://identitytoolkit.googleapis.com",
+    "https://securetoken.googleapis.com",
+    "https://firebasedataconnect.googleapis.com"
+  ],
+  "browserInteractionTested": false,
+  "registrationAndEnrollmentTested": false
+}
