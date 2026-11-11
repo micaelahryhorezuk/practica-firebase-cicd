@@ -1,0 +1,22 @@
+{
+  "providerDisplayedInUserScreenshot": "Correo electrónico/contraseña",
+  "stateDisplayed": "Habilitada",
+  "providerEnablementEvidence": "User-supplied Console screenshot; not inferred from SDK response",
+  "sdkProjectConfig": {
+    "httpStatus": 200,
+    "projectId": "390346504572",
+    "authorizedDomains": [
+      "localhost",
+      "practica-cicd-micela.firebaseapp.com",
+      "practica-cicd-micela.web.app"
+    ],
+    "fields": [
+      "projectId",
+      "authorizedDomains"
+    ]
+  },
+  "expectedProject": "practica-cicd-micela",
+  "registrationInBrowserTested": false,
+  "enrollmentInBrowserTested": false,
+  "privateScreenshotPublished": false
+}

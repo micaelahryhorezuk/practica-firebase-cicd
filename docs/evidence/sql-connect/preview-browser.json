@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-11",
+  "testedCommit": "9234403571a63f521fbf0723ce013d0c484c6564",
+  "runner": "Chromium 156 via CDP",
+  "checks": {
+    "publicCatalogue": 7,
+    "initialLevelFilter": 2,
+    "registration": true,
+    "enrollment": true,
+    "ownEnrollment": true,
+    "logoutHidesEnrollments": true,
+    "secondAccountIsolation": true,
+    "signInRestoresOwnEnrollment": true,
+    "cancelEnrollment": true
+  },
+  "limitations": [
+    "Synthetic test accounts retained; first incomplete automation attempt left one synthetic enrollment. No existing user records changed.",
+    "No images rendered on /cursos; image check not applicable to this route."
+  ],
+  "build": "npm run build exit0 outside sandbox; sandbox subprocess EPERM caused earlier false build diagnosis",
+  "localChecks": "npm test: 5 test files pass; npm run typecheck exit0",
+  "liveVerified": false
+}
