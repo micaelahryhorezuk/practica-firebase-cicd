@@ -85,3 +85,7 @@ El SDK instalado de Data Connect construye sus URLs con `firebasedataconnect.goo
 - [Ocho workflows CI/preview](evidence/sql-connect/ci-previews.json) aprobadas para sus SHA exactos. Ejecutan instalación, typecheck, build y deploy, no los 13 tests unitarios. [Preview integrado #13](https://practica-cicd-micela--pr13-feat-clase2-sql-conn-pigrmg72.web.app/cursos); no constituye prueba de navegador ni live.
 - URL de producción con inscripción: pendiente de L7.
 - Seis respuestas: [REFLEXION.md](../REFLEXION.md).
+
+## Regresión de perfil pendiente al registrarse
+
+Auth puede publicar la sesión antes de crear el perfil SQL del alumno. La primera prueba live reprodujo un error de clave foránea al inscribirse inmediatamente. `inscribirme` consulta el perfil propio, lo inicializa mediante la operación existente `UpsertAlumno` solo si falta y espera su finalización antes de escribir la matrícula. Los perfiles existentes se conservan; UID/email siguen proviniendo exclusivamente del token. Las pruebas cubren perfil ausente, existente y fallo de inicialización. No se modifican esquema, permisos, facturación ni datos existentes.
