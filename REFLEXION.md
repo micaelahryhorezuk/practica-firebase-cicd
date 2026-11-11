@@ -1,7 +1,7 @@
 # Reflexión · SQL Connect (clase 2)
 
 Solución integrada con el proyecto de clase 1. La reflexión anterior se conserva en [REFLEXION-CLASE1.md](REFLEXION-CLASE1.md).
-El backend SQL Connect está desplegado y su API pública fue comprobada. Hay tracker y siete PR hijos en borrador, con ocho workflows de CI/preview aprobadas para sus SHA exactos. El [preview integrado](https://practica-cicd-micela--pr13-feat-clase2-sql-conn-pigrmg72.web.app/cursos) no equivale a publicación live. Auth y la prueba de inscripción en navegador siguen pendientes.
+El backend SQL Connect está desplegado y su API pública fue comprobada. Hay tracker y siete PR hijos en borrador, con ocho workflows de CI/preview aprobadas para sus SHA exactos. El [preview integrado](https://practica-cicd-micela--pr13-feat-clase2-sql-conn-pigrmg72.web.app/cursos) no equivale a publicación live. La configuración básica de Auth ya responde, pero la prueba de registro e inscripción en navegador sigue pendiente.
 
 ## 1. Identidad e IDOR
 
@@ -50,7 +50,7 @@ Se registran aquí las salidas observadas de `npm run atacar`, antes y después 
 - Pruebas de integración: [salida GREEN](docs/evidence/sql-connect/green.txt), **6/6 pasan**, exit 0. [RED original](docs/evidence/sql-connect/red.txt): 6 fallos por operaciones aún inexistentes. Tras completar la solución, también pasan `npm test` (13/13, incluidas configuración por entorno y regresiones de renderizado/cambio de cuenta), `npm run typecheck` y `npm run build` (export estático de las cuatro rutas).
 - CSP: RED observado antes del cambio; después pasan las **9 pruebas de headers y pipeline**. [Headers/caché del preview](docs/evidence/sql-connect/preview-headers.txt) y [HTTP/CSP/identidad](docs/evidence/sql-connect/preview-http.json) pasan para SHA9234403. Esto no sustituye la comprobación de Network/consola en navegador.
 - Backend de producción: [deploy exitoso](docs/evidence/sql-connect/production-deploy.txt) bajo prueba gratuita, sin activar facturación. [API real](docs/evidence/sql-connect/production-public-check.json): 7 cursos y 4 operaciones privadas rechazadas sin token; catálogo sin cambios tras los rechazos. El seed se ejecutó solo tras comprobar base vacía y cargó 7 cursos y 2 alumnos ficticios. Al principio el CLI usó base temporal; después [Cloud SQL quedó RUNNABLE](docs/evidence/sql-connect/production-instance-ready.json), [sql:diff no encontró diferencias](docs/evidence/sql-connect/production-sql-diff.txt) y se conservaron los siete IDs de cursos. El proveedor usa PostgreSQL18 frente a17 del enunciado; la usuaria aceptó esa diferencia sin cambiar de plan.
-- Pendiente: [Auth aún sin inicializar](docs/evidence/sql-connect/production-auth-status.json), frontend de clase 2 no publicado y flujo completo no probado en navegador.
+- Auth: la [primera consulta](docs/evidence/sql-connect/production-auth-status.json) devolvió CONFIGURATION_NOT_FOUND. Tras nueva captura del proveedor Habilitada, [la configuración pública del SDK ya responde200](docs/evidence/sql-connect/auth-sdk-ready.json) para el proyecto correcto. Pendiente el flujo completo en navegador; el frontend está en preview, no en live.
 
 ## Entrega pendiente
 
