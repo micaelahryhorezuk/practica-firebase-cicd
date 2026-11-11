@@ -1,0 +1,32 @@
+Preflight final: sin facturación/cuenta de cobro y sin instancia previa. Sin --force, sin aprobación automática de prompts.
+
+=== Deploying to 'practica-cicd-micela'...
+
+i  deploying dataconnect
+i  dataconnect: ensuring required API firebasedataconnect.googleapis.com is enabled...
+i  dataconnect: ensuring required API sqladmin.googleapis.com is enabled...
+i  dataconnect: Successfully compiled schema and connectors
+✔  dataconnect: Created service projects/practica-cicd-micela/locations/us-east4/services/catalogo
+i  dataconnect: Checking for CloudSQL resources...
+i  dataconnect: Cloud SQL Instance catalogo-fdc is being created.
+This instance is provided under the terms of the SQL Connect no-cost trial https://firebase.google.com/pricing
+
+   Meanwhile, your data are saved in a temporary database and will be migrated once complete.
+   Your free trial instance won't show in google cloud console until a billing account is added.
+   However, you can still use the gcloud cli to monitor your database instance:
+
+	e.g. gcloud sql instances list --project practica-cicd-micela
+
+i  dataconnect: Generating SQL schema migrations to be compatible...
+i  dataconnect: Linking the Cloud SQL instance...
+⚠  dataconnect: Skip SQL schema migration because Cloud SQL is still being created
+✔  dataconnect: Migrated schema projects/practica-cicd-micela/locations/us-east4/services/catalogo/schemas/main
+✔  dataconnect: Deployed connector projects/practica-cicd-micela/locations/us-east4/services/catalogo/connectors/cursos
+✔  dataconnect: Deployment complete! View your deployed schema and connectors at
+
+    https://console.firebase.google.com/project/practica-cicd-micela/dataconnect/locations/us-east4/services/catalogo/schema
+
+
+✔  Deploy complete!
+
+Project Console: https://console.firebase.google.com/project/practica-cicd-micela/overview
