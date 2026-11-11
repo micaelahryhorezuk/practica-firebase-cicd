@@ -51,7 +51,13 @@ export async function registrarAlumno(nombre: string): Promise<void> {
 }
 
 export async function inscribirme(cursoId: string): Promise<void> {
-  const { dc } = firebase();
+  const { dc, auth } = firebase();
+  // Auth can become visible before registration finishes creating the SQL profile.
+  // Preserve existing profiles and await initialization before the foreign-key write.
+  const { data } = await executeQuery(queryRef<MisInscripcionesData>(dc, "MisInscripciones"));
+  if (!data.alumno) {
+    await registrarAlumno(auth.currentUser?.displayName ?? "Alumno");
+  }
   await executeMutation(mutationRef<unknown, CursoVars>(dc, "Inscribirme", { cursoId }));
 }
 

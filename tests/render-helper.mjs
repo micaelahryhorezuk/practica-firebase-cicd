@@ -7,7 +7,7 @@ import ts from "typescript";
 const root = fileURLToPath(new URL("../", import.meta.url));
 
 /** Compile a current repository component for isolated server-render tests. */
-export function loadComponent(relativePath, mocks = {}) {
+export function loadComponent(relativePath, mocks = {}, exportName = "default") {
   const filename = resolve(root, relativePath);
   const inside = relative(root, filename);
   if (isAbsolute(relativePath) || inside.startsWith("..") || isAbsolute(inside) || inside.split(/[\\/]/).includes(".git")) {
@@ -25,5 +25,5 @@ export function loadComponent(relativePath, mocks = {}) {
   compiled.paths = Module._nodeModulePaths(dirname(filename));
   compiled.require = (id) => Object.hasOwn(mocks, id) ? mocks[id] : requireFromSource(id);
   compiled._compile(outputText, filename);
-  return compiled.exports.default;
+  return compiled.exports[exportName];
 }

@@ -17,6 +17,8 @@ S9. La usuaria eligió «Autorizar consulta, push y PR; sin merge» para github.
 
 S10. Usuario: «haz lo que haga falta» y «si», en respuesta a «¿Autorizas usar tus sesiones configuradas de GitHub y Firebase para integrar los PR de clase 2 y publicar en practica-cicd-micela, únicamente después de corregir el build y verificar el flujo, sin activar facturación ni borrar recursos?»
 
+S11. Alcance S10: corregir el fallo de inscripción reproducido en live: «violates SQL foreign key constraint: matricula_alumno_id_fkey». No cambiar permisos, esquema ni datos existentes.
+
 ## Tasks
 T1 [done] S1: integrar material provisto conservando proyecto/workflows; inline; commits: fcc1b7e, eba6a50, ba9bc97, 8c78edc.
 T2 [done] S2–S4: esquema y operaciones, RED/GREEN y auditoría local aislada; gentle-ai-worker (context backstop); Risk: item 2 (autorización); commits: fcc1b7e, a7f3bab.
@@ -32,6 +34,8 @@ T10 [done] S8: PostgreSQL18 de la prueba gratuita aceptado por la usuaria sin ca
 T11 [done] S5/S7/S9: ocho runs CI/preview success para SHA exactos, metadatos de ocho PR confirmados; HTTP/headers/CSP/caché/footer del preview integrado pasan para9234403. No se reiniciaron runs ni se probó navegador.
 
 T12 [in progress] S5/S10: inline; confirmar build, navegador, integración encadenada y publicación live. Build exit0 fuera del sandbox; GitHub confirma ocho CI success. Sin cambios de código previstos.
+
+T13 [in progress] S10/S11: inline; asegurar perfil propio antes de matrícula; regresión RED/GREEN, preview, verificador, PR y publicación. Risk: item4 (orden asíncrono de creación de perfil/matrícula).
 
 ## Log
 L1. Solicitud original: «tengo que hacer Clase2_lunes_SQLConnect_Enunciado.pdf».
@@ -102,3 +106,9 @@ L43. 2026-11-11. Usuario: «haz lo que haga falta»; autorización final «si» 
 L44. Chromium/CDP: diez comprobaciones aprobadas en preview9234403 (catálogo7, filtro2, registroA/B, inscripciónA, lista propia, salida oculta lista, B vacío, reingresoA, bajaA). Un primer intento de automatización no seleccionó la pestaña Ingresar; corregido el runner, no la app. Cuentas ficticias conservadas; una matrícula del intento incompleto permanece. Verificador independiente confirmó igualdad de runtime/config con9234403 y propagación segura13→12→…→7→6 por merge commits sin borrar ramas. Antes del merge6 se exige CI exacta y comparación de árbol; después, prueba live.
 
 L45. Hijos13..7 integrados y confirmados MERGED, cada uno después de CI success para su cabeza propagada exacta. Tracker head fcc10e6; git diff --exit-code9234403 contra runtime/config/workflows devuelve0. Revisión independiente sin bloqueantes. Recurso404 identificado: /favicon.ico; sin fallos funcionales ni CSP en el flujo. No se cambió facturación, esquema ni recursos.
+
+L46. PR6 MERGED1d46b45; deploy42958981054 success. Chromium live confirmó footer/catalogo/filtro/registro, pero inscripción falló por FK de alumno inexistente. No se cuenta como entrega terminada. Rama fix/clase2-registration-ready; se preserva esquema y autorización por token. Inicializar solo el perfil ausente mediante la operación UpsertAlumno existente antes de escribir matrícula; conservar perfiles existentes.
+
+L47. RED observado por interfaz pública inscribirme: fallo FK para perfil ausente y escritura indebida tras fallo de perfil. GREEN4/4 focused; suite real fuera del sandbox16/16 (la salida de5 archivos en sandbox ocultaba los subtests); typecheck exit0 y build en verificación. Se reutiliza registrarAlumno y se preservan perfiles existentes; no cambios de GQL, reglas, dependencias ni migración.
+
+L48. Build exit0. Verificador independiente PASS: perfil ausente espera upsert deliberadamente diferido, perfil existente conservado, fallo sin matrícula; baseline reproduce FK; seis diferenciales de listarCursos/misInscripciones/darmeDeBaja idénticos. Suite16/16 y focused4/4 en scratch. Spot check padre node probe.mjs exit0. Revisión nativa no disponible (gentle-ai ausente); no se inventa aprobación. Pendiente preview/live corregidos.
