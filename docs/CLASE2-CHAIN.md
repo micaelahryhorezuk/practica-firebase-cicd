@@ -8,7 +8,7 @@ Los siete PR hijos (#7–#13) fueron integrados con merge commits y CI aprobada 
 - Su árbol coincide con la base local `1e4f30e`; los hijos conservan diffs limpias de Clase 2.
 - Estrategia elegida: feature-branch-chain. No se reescribe el historial de los hijos.
 - Backend desplegado en `practica-cicd-micela`, sin facturación, bajo prueba gratuita.
-- Frontend de Clase 2 todavía sin publicar en live. Usar el preview del último hijo para comprobar la funcionalidad integrada, no los previews de etapas intermedias.
+- Frontend de Clase 2 publicado y comprobado en [live](https://practica-cicd-micela.web.app); [evidencia](evidence/sql-connect/live-browser.json).
 
 ## Unidades
 
@@ -34,8 +34,8 @@ El hijo 1 apunta al tracker; cada hijo posterior apunta al padre inmediato. El t
 - Revisión nativa del slice7 aprobada y reconocida; no sustituye las pruebas funcionales.
 - La suite independiente no pudo ejecutarse completa por dependencias faltantes en su aislamiento; se conserva esa limitación. El diferencial independiente de configuración sí pasó.
 - Auth confirmado: registro, ingreso, inscripción y baja funcionan en Chromium en el preview integrado. La evidencia inicial CONFIGURATION_NOT_FOUND quedó superada por la configuración posterior.
-- Diez comprobaciones de navegador aprobadas; ver [evidencia](evidence/sql-connect/preview-browser.json). La validación live se realiza después del deploy.
+- Doce comprobaciones live aprobadas, incluyendo imagen. Corrección #14 integrada; suite17/17, tipos/build y verificación independiente aprobados.
 
-## Integración posterior
+## Integración completada
 
 Hijos integrados del último al primero, conservando las bases originales, sin borrar ramas. El árbol funcional del tracker coincide con el preview probado9234403. Antes de integrar #6 se exige CI aprobada para su cabeza exacta. No borrar la instancia ni cambiar de plan: la prueba gratuita es única por proyecto. No se autorizó borrar recursos ni activar facturación.

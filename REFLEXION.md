@@ -1,7 +1,7 @@
 # Reflexión · SQL Connect (clase 2)
 
 Solución integrada con el proyecto de clase 1. La reflexión anterior se conserva en [REFLEXION-CLASE1.md](REFLEXION-CLASE1.md).
-El backend SQL Connect está desplegado y su API pública fue comprobada. Hay tracker y siete PR hijos en borrador, con ocho workflows de CI/preview aprobadas para sus SHA exactos. El [preview integrado](https://practica-cicd-micela--pr13-feat-clase2-sql-conn-pigrmg72.web.app/cursos) no equivale a publicación live. El flujo completo de registro, inscripción, aislamiento entre cuentas y baja pasó en Chromium en el preview integrado; la publicación live sigue en curso.
+El backend SQL Connect está desplegado y su API pública fue comprobada. El tracker y sus siete hijos ya están integrados, junto con la corrección de inscripción #14. La aplicación está publicada en Hosting. El flujo completo y la imagen de portada pasaron en Chromium en producción; [evidencia final](docs/evidence/sql-connect/live-browser.json).
 
 ## 1. Identidad e IDOR
 
@@ -50,11 +50,12 @@ Se registran aquí las salidas observadas de `npm run atacar`, antes y después 
 - Pruebas de integración: [salida GREEN](docs/evidence/sql-connect/green.txt), **6/6 pasan**, exit 0. [RED original](docs/evidence/sql-connect/red.txt): 6 fallos por operaciones aún inexistentes. Tras completar la solución, también pasan `npm test` (13/13, incluidas configuración por entorno y regresiones de renderizado/cambio de cuenta), `npm run typecheck` y `npm run build` (export estático de las cuatro rutas).
 - CSP: RED observado antes del cambio; después pasan las **9 pruebas de headers y pipeline**. [Headers/caché del preview](docs/evidence/sql-connect/preview-headers.txt) y [HTTP/CSP/identidad](docs/evidence/sql-connect/preview-http.json) pasan para SHA9234403. Esto no sustituye la comprobación de Network/consola en navegador.
 - Backend de producción: [deploy exitoso](docs/evidence/sql-connect/production-deploy.txt) bajo prueba gratuita, sin activar facturación. [API real](docs/evidence/sql-connect/production-public-check.json): 7 cursos y 4 operaciones privadas rechazadas sin token; catálogo sin cambios tras los rechazos. El seed se ejecutó solo tras comprobar base vacía y cargó 7 cursos y 2 alumnos ficticios. Al principio el CLI usó base temporal; después [Cloud SQL quedó RUNNABLE](docs/evidence/sql-connect/production-instance-ready.json), [sql:diff no encontró diferencias](docs/evidence/sql-connect/production-sql-diff.txt) y se conservaron los siete IDs de cursos. El proveedor usa PostgreSQL18 frente a17 del enunciado; la usuaria aceptó esa diferencia sin cambiar de plan.
-- Auth: la [primera consulta](docs/evidence/sql-connect/production-auth-status.json) devolvió CONFIGURATION_NOT_FOUND. Tras nueva captura del proveedor Habilitada, [la configuración pública del SDK ya responde200](docs/evidence/sql-connect/auth-sdk-ready.json) para el proyecto correcto. Flujo completo verificado en Chromium en preview; publicación live en curso.
+- Auth: la [primera consulta](docs/evidence/sql-connect/production-auth-status.json) devolvió CONFIGURATION_NOT_FOUND. Tras nueva captura del proveedor Habilitada, [la configuración pública del SDK ya responde200](docs/evidence/sql-connect/auth-sdk-ready.json) para el proyecto correcto. Flujo completo verificado en Chromium en preview y producción.
 
-## Entrega pendiente
+## Entrega
 
 - Repositorio existente: <https://github.com/micaelahryhorezuk/practica-firebase-cicd>.
-- PR de clase 2 mergeado: pendiente.
-- URL objetivo: <https://practica-cicd-micela.web.app>; inscripción de clase 2 todavía no verificada allí.
-- Habilitación de Auth, publicación del frontend y cierre de L7: [pasos de entrega](docs/CLASE2.md#producción-y-entrega-pendientes-l7).
+- PR de clase 2 integrado: [#6](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/6); corrección de inscripción: [#14](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/14).
+- URL final: <https://practica-cicd-micela.web.app>; inscripción y baja verificadas allí.
+- L7 completada: [entregables y evidencias](docs/CLASE2.md#entregables).
+- Pruebas actuales: 17/17; tipos/build y verificación independiente aprobados. La primera prueba live descubrió un perfil SQL aún no creado; #14 espera su inicialización antes de matricular. Las doce comprobaciones live posteriores pasaron; se conserva el aviso no bloqueante de favicon404.

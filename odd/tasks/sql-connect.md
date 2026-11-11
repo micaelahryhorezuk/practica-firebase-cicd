@@ -33,9 +33,9 @@ T9 [done] S5/S7/S9: issue5 aprobado y confirmado; tracker draft6 y siete hijos d
 T10 [done] S8: PostgreSQL18 de la prueba gratuita aceptado por la usuaria sin cambio de plan.
 T11 [done] S5/S7/S9: ocho runs CI/preview success para SHA exactos, metadatos de ocho PR confirmados; HTTP/headers/CSP/caché/footer del preview integrado pasan para9234403. No se reiniciaron runs ni se probó navegador.
 
-T12 [in progress] S5/S10: inline; confirmar build, navegador, integración encadenada y publicación live. Build exit0 fuera del sandbox; GitHub confirma ocho CI success. Sin cambios de código previstos.
+T12 [done] S5/S10: inline; confirmar build, navegador, integración encadenada y publicación live. Build exit0 fuera del sandbox; GitHub confirma ocho CI success. Sin cambios de código previstos.
 
-T13 [in progress] S10/S11: inline; asegurar perfil propio antes de matrícula; regresión RED/GREEN, preview, verificador, PR y publicación. Risk: item4 (orden asíncrono de creación de perfil/matrícula).
+T13 [done] S10/S11: inline; asegurar perfil propio antes de matrícula; regresión RED/GREEN, preview, verificador, PR y publicación. Risk: item4 (orden asíncrono de creación de perfil/matrícula).
 
 ## Log
 L1. Solicitud original: «tengo que hacer Clase2_lunes_SQLConnect_Enunciado.pdf».
@@ -112,3 +112,5 @@ L46. PR6 MERGED1d46b45; deploy42958981054 success. Chromium live confirmó foote
 L47. RED observado por interfaz pública inscribirme: fallo FK para perfil ausente y escritura indebida tras fallo de perfil. GREEN4/4 focused; suite real fuera del sandbox16/16 (la salida de5 archivos en sandbox ocultaba los subtests); typecheck exit0 y build en verificación. Se reutiliza registrarAlumno y se preservan perfiles existentes; no cambios de GQL, reglas, dependencias ni migración.
 
 L48. Build exit0. Verificador independiente PASS: perfil ausente espera upsert deliberadamente diferido, perfil existente conservado, fallo sin matrícula; baseline reproduce FK; seis diferenciales de listarCursos/misInscripciones/darmeDeBaja idénticos. Suite16/16 y focused4/4 en scratch. Spot check padre node probe.mjs exit0. Revisión nativa no disponible (gentle-ai ausente); no se inventa aprobación. Pendiente preview/live corregidos.
+
+L49. PR14 MERGEDf8f910b (commits2870d60/f3d4e75); deploy42960034964 success. Suite final17/17, delayed probe conservado en tests. Preview corregido y live:12 comprobaciones cada uno, incluida inscripción inmediata y portada. Live solo favicon404 no bloqueante. T12/T13 cumplidas; cierre documental sin cambios runtime. Evidencia docs/evidence/sql-connect/live-browser.json. Datos ficticios conservados y límites declarados; no borrar recursos. Engram/CLI revisión nativa no disponibles; mirror pendiente, sin aprobación nativa inventada.
