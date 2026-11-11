@@ -1,220 +1,60 @@
-# Reflexión · CI/CD con Firebase Hosting
+# Reflexión · SQL Connect (clase 2)
 
-Repositorio: https://github.com/micaelahryhorezuk/practica-firebase-cicd
-Producción: https://practica-cicd-micela.web.app. **Antes de los merges**, la base
-`bc9898b` sin hardening estaba verificada por HTTP; las
-[capturas manuales de versión](docs/evidence/manual-version-verification.md) muestran
-preview `b6639e2` y producción `bc9898b` en ese momento, no el footer live actual.
-Con autorización posterior S9, [PR #2](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/2)
-se integró a `main` (`88e0938ab783d90d28820274fe7f88cefa886da5`, run de producción
-42534289830 SUCCESS) y luego [PR #3](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/3)
-(`c3051dc842a6de6fc15471cab8e8049c8cec5ce7`, run 42534675406 SUCCESS); ambos
-incluyeron `Deploy al canal live`. La [medición B5 local](docs/evidence/b5-production.md)
-registra script público exit 0 para headers/caché; el fetch separado de identidad falló.
-La [captura manual B5](docs/evidence/b5-manual-verification.md) confirma el footer live
-`c3051dc`/`main` junto a la URL, aunque el pie está parcialmente cortado abajo. Un
-[reporte manual B5](docs/evidence/b5-manual-verification.md) muestra **A** para la URL
-live a 09 Nov 2026 00:04:18 UTC, frente a la **D** inicial; el JSON automático sigue
-con `securityHeadersGrade=null`. El filtro y la imagen también se probaron en producción.
-Se hizo rollback a `bc9898b` y se restauró `c3051dc`; el detalle está en
-[la evidencia B5](docs/evidence/b5-production.md).
+Solución integrada con el proyecto de clase 1. La reflexión anterior se conserva en [REFLEXION-CLASE1.md](REFLEXION-CLASE1.md).
+El backend SQL Connect está desplegado y su API pública fue comprobada. Hay tracker y siete PR hijos en borrador, con ocho workflows de CI/preview aprobadas para sus SHA exactos. El [preview integrado](https://practica-cicd-micela--pr13-feat-clase2-sql-conn-pigrmg72.web.app/cursos) no equivale a publicación live. El flujo completo de registro, inscripción, aislamiento entre cuentas y baja pasó en Chromium en el preview integrado; la publicación live sigue en curso.
 
-## 1. ¿Por qué vence el preview?
+## 1. Identidad e IDOR
 
-El vencimiento de tres días limita entornos abandonados, consumo de cuota y exposición
-prolongada de versiones antiguas. La URL de preview no es un control de acceso:
-no debe contener secretos ni datos sensibles aunque sea temporal.
+Ninguna operación del alumno recibe su UID porque permitir que el cliente elija el dueño del recurso facilita IDOR: acceder a un objeto de otra persona cambiando un identificador. El servidor obtiene `auth.uid` de un token validado y lo usa tanto en la consulta como en la clave de escritura/baja. Autenticarse no basta: además se debe comprobar la propiedad del recurso.
 
-## 2. Desplegar y liberar
+`UpsertAlumno` toma también el email de `auth.token.email`, no de un formulario que pueda falsificar el email de otra persona.
 
-Desplegar instala una versión en un entorno. Liberar la hace disponible a sus usuarios.
-El PR despliega un preview sin liberar en producción; el push a `main` publica en `live`,
-por lo que en este flujo despliegue y liberación de producción están acoplados.
-Un rollback cambia Hosting, no Git: el próximo push a `main` volvería a publicar su código.
-Para mantener la corrección, el equipo debe revertir o corregir el cambio mediante un PR.
+## 2. PUBLIC, USER y NO_ACCESS
 
-## 3. Credenciales
+El catálogo no contiene información personal y debe poder consultarse sin iniciar sesión: `ListCursos` es PUBLIC. `ListAlumnos` expone UID, nombre y email: necesita NO_ACCESS desde el cliente. USER sería insuficiente, pues permitiría que cualquier alumno autenticado consultara a todos los demás.
 
-La clave JSON autentica a la service account. Si se publica, quien la obtenga puede actuar
-con sus permisos, por ejemplo desplegar contenido malicioso. Debe estar únicamente en un
-secreto de GitHub, con permisos mínimos de despliegue, acceso restringido y rotación ante
-exposición. No basta con borrar una clave del último commit: debe revocarse.
-El workflow omite PR de forks y no usa `pull_request_target` para ejecutar su código con secretos.
-Después de `firebase init hosting:github`, GitHub confirmó el secreto
-`FIREBASE_SERVICE_ACCOUNT_PRACTICA_CICD_MICELA`, coincidente con ambos workflows.
-Solo se consultaron el nombre y la fecha de actualización, nunca el valor.
+Un panel administrativo podría usar un backend privilegiado con Admin SDK, autenticación y autorización explícita del rol administrador, IAM mínimo y registro de accesos. Las credenciales administrativas nunca deben incluirse en el frontend. NO_ACCESS no elimina la posibilidad de acceso privilegiado administrativo.
 
-## 4. CSP y funcionamiento
+## 3. Clave compuesta e idempotencia
 
-El HTML exportado contiene tres scripts inline en cada página inspeccionada: `/`, `/cursos`
-y `404.html`. `script-src 'self'` permite archivos del propio origen, pero no estos scripts
-inline de hidratación de Next.js. Por ello podría verse la página y no funcionar el filtro.
-Esto se comprobó inspeccionando el HTML, **no reproduciendo el bloqueo en un navegador**.
-La usuaria informó después que el filtro funciona y la imagen de Inicio se ve en el preview;
-es su comprobación manual, no interacción del agente ni observación de producción.
+La clave `(alumno, curso)` impone la unicidad en PostgreSQL, también si llegan solicitudes simultáneas o se omite el frontend. Una validación del cliente se puede eludir y tiene condiciones de carrera.
 
-La política preparada permite `'unsafe-inline'` solo en `script-src`, sin `'unsafe-eval'`.
-Es una concesión: los scripts inline legítimos funcionan, pero también podrían ejecutarse
-scripts inline inyectados si existiera una vulnerabilidad XSS. No elimina la necesidad de
-validar datos y evitar inserciones inseguras de HTML. `style-src` permanece en `'self'`:
-el export inspeccionado usa CSS externo y no contiene estilos inline.
+`matricula_insert` fallaría ante un duplicado. `matricula_upsert` crea la matrícula o conserva/actualiza la existente sin duplicarla. No se envía fecha en el upsert: `@default(expr: "request.time")` la completa al insertar y la inscripción repetida conserva la fecha original. El cupo se muestra pero el enunciado no pide implementar reserva de vacantes; eso requeriría una regla transaccional adicional en el servidor.
 
-La alternativa más restrictiva es calcular hashes SHA-256 de cada script inline del export
-en cada build e incorporarlos a la CSP antes de desplegar. No está implementada en esta
-versión. Un nonce distinto por respuesta necesita renderizado dinámico; un nonce fijo en
-archivos estáticos no proporciona esa garantía.
+## 4. Configuración pública y App Check
 
-La portada solicita `https://picsum.photos` y un GET real respondió con redirección 302 a
-`https://fastly.picsum.photos`, seguido de HTTP 200 (`image/jpeg`). Ambos orígenes exactos
-están en `img-src`; no se habilitaron `https:` ni comodines. La solicitud HEAD respondió 405,
-por eso la evidencia relevante es el GET. La usuaria confirmó filtro e imagen en el preview.
-Tras restaurar live, el 09 Nov 2026 02:28 UTC se probaron en producción: el filtro
-`intermedio` mostró 2 de 6 cursos y la imagen cargó a 960×320; el detalle está en
-[la evidencia B5](docs/evidence/b5-manual-verification.md).
+La configuración web de Firebase identifica el proyecto y viaja en el bundle; no equivale a una clave de servicio ni concede acceso administrativo. Auth y las reglas de cada operación son las que autorizan los datos.
 
-## 5. Headers básicos
+App Check agrega una señal de autenticidad de la aplicación/dispositivo y permite rechazar clientes no atestados cuando se configura y exige en el servicio. No sustituye Auth ni las reglas de propiedad, y no garantiza eliminar todo abuso. Aquí se explica esa capa; no se declara implementada.
 
-| Header | Mitigación y decisión |
-|---|---|
-| Strict-Transport-Security | Obliga a futuras conexiones HTTPS durante un año tras una respuesta HTTPS. No protege una primera visita HTTP por sí solo. Sin preload ni includeSubDomains, que exigirían revisar todos los subdominios. Firebase puede reemplazarlo en dominios `web.app`. |
-| X-Content-Type-Options | `nosniff` evita interpretación de contenido con tipos distintos al MIME declarado. |
-| X-Frame-Options | `DENY` evita incrustación en iframes y reduce clickjacking; complementado por CSP `frame-ancestors 'none'`. |
-| Referrer-Policy | `strict-origin-when-cross-origin` limita el referrer entre orígenes al origen y no lo envía al bajar de HTTPS a HTTP. |
-| Permissions-Policy | Deshabilita cámara, micrófono y geolocalización, que el catálogo no necesita. |
+## 5. Comparación con Express + pg
 
-## 6. Caché
+SQL Connect aporta esquema relacional declarativo, operaciones predefinidas compiladas a SQL, integración con Auth y generación de SDK. El navegador invoca nombres y variables, no SQL arbitrario. La plataforma parametriza las variables; no hay que construir consultas concatenando texto del usuario.
 
-`/_next/static/**` usa `public, max-age=31536000, immutable`: sus nombres incluyen hashes;
-al cambiar el contenido se genera otra URL. El HTML usa `no-cache`, que permite almacenarlo
-pero exige revalidación antes de reutilizarlo. Así se detectan deploys y rollbacks sin esperar
-un año. La regla específica de assets aparece después de la general y la sobreescribe.
+Frente a una API propia se pierde flexibilidad para lógica arbitraria, middleware y protocolos personalizados, y se depende del modelo y límites del proveedor. Con Express + pg se controla más, pero hay que construir y mantener autenticación, autorización por recurso, consultas parametrizadas, validación y operación del servidor.
 
-## 7. Si se necesitara SSR
+A diferencia de Firestore Rules sobre documentos, aquí la autorización se declara en operaciones sobre un modelo relacional con claves foráneas y restricciones de base de datos.
 
-`output: "export"` dejaría de servir: se necesitaría un runtime de servidor, por ejemplo
-Firebase App Hosting sobre Cloud Run, con plan Blaze y facturación habilitada.
-La CSP podría usar nonces nuevos por respuesta y adaptarse a los orígenes realmente usados.
-Habría que revisar también la caché del HTML dinámico y no cachear contenido personalizado
-como si fuera un asset público.
+## 6. CSP y orígenes exactos
 
-## Evidencias y entrega
+La CSP anterior solo permitía conexiones al propio origen por herencia de `default-src 'self'`. Auth y SQL Connect requieren otros orígenes. `connect-src` permite únicamente `'self'`, `https://identitytoolkit.googleapis.com`, `https://securetoken.googleapis.com` y `https://firebasedataconnect.googleapis.com` para este flujo.
 
-### Local (no sustituye B1/B5 en producción)
+Un comodín como `https://*.googleapis.com` permitiría muchos servicios no usados por la app y ampliaría innecesariamente los destinos de una posible exfiltración. `connect-src` limita conexiones del navegador, pero no sustituye Auth ni la autorización de operaciones en SQL Connect. El flujo en navegador pasó en el preview servido por Hosting; ver [evidencia](docs/evidence/sql-connect/preview-browser.json).
 
-- Instalación: `npm ci --no-audit --no-fund`, exit 0; sin cambios de versiones.
-- Plantilla antes de modificar: `npm run typecheck` y `npm run build`, exit 0.
-- Antes de headers, emulador con proyecto ficticio `demo-practica-cicd-micela`:
-  `check-headers.mjs` terminó con exit 1 y `❌ 7 control(es) pendiente(s).`.
-- Después de headers, el mismo script en el emulador terminó con exit 0 y
-  `✅ Todos los controles pasaron.`. Un probe HTTP verificó `/` y `/cursos` con status 200,
-  ruta desconocida con 404, HTML con `Cache-Control: no-cache` y asset JavaScript con
-  `public, max-age=31536000, immutable`.
-- Tests estructurales de pipeline y headers: 4 + 4 pasan por separado.
-- Checks finales: suite 8/8, `npm run typecheck`, `npm run build` y `git diff --check`, exit 0.
-- Revisión independiente: preparación local aprobada por S1–S6; también ejecutó typecheck,
-  build y suite 8/8 en una copia aislada, y validó semánticamente ambos YAML. No encontró
-  bloqueos. No ejecutó operaciones remotas ni pruebas de navegador.
+## Evidencia de auditoría
 
-### Producción inicial: B1 completa con evidencias manuales
+Se registran aquí las salidas observadas de `npm run atacar`, antes y después de corregir. Solo emuladores locales y datos ficticios. Los resultados no sustituyen la comprobación en navegador ni prueban producción.
 
-Medición UTC: `2026-11-07T20:38:02.457Z`. Base publicada:
-`bc9898bb9a8320c6920bcba9e026a0732d70f9ff`, con etiqueta de build `baseline`.
-El HTML de `/` coincide exactamente con el export local; `/` y `/cursos` respondieron 200,
-una ruta inexistente 404 y un asset JavaScript 200.
+- Antes: [salida real](docs/evidence/sql-connect/antes.txt): el catálogo devuelve 7 cursos; ListAlumnos filtra datos personales sin login; faltan las operaciones de inscripción. Resultado: **1 vulnerabilidad y 2 controles pendientes**.
+- Después: [salida real](docs/evidence/sql-connect/despues.txt): **Todos los controles pasaron**, sin vulnerabilidades ni pendientes. ListAlumnos se rechaza, la inscripción anónima se rechaza, la repetición no falla y se comprueba el aislamiento entre A y B.
+- Pruebas de integración: [salida GREEN](docs/evidence/sql-connect/green.txt), **6/6 pasan**, exit 0. [RED original](docs/evidence/sql-connect/red.txt): 6 fallos por operaciones aún inexistentes. Tras completar la solución, también pasan `npm test` (13/13, incluidas configuración por entorno y regresiones de renderizado/cambio de cuenta), `npm run typecheck` y `npm run build` (export estático de las cuatro rutas).
+- CSP: RED observado antes del cambio; después pasan las **9 pruebas de headers y pipeline**. [Headers/caché del preview](docs/evidence/sql-connect/preview-headers.txt) y [HTTP/CSP/identidad](docs/evidence/sql-connect/preview-http.json) pasan para SHA9234403. Esto no sustituye la comprobación de Network/consola en navegador.
+- Backend de producción: [deploy exitoso](docs/evidence/sql-connect/production-deploy.txt) bajo prueba gratuita, sin activar facturación. [API real](docs/evidence/sql-connect/production-public-check.json): 7 cursos y 4 operaciones privadas rechazadas sin token; catálogo sin cambios tras los rechazos. El seed se ejecutó solo tras comprobar base vacía y cargó 7 cursos y 2 alumnos ficticios. Al principio el CLI usó base temporal; después [Cloud SQL quedó RUNNABLE](docs/evidence/sql-connect/production-instance-ready.json), [sql:diff no encontró diferencias](docs/evidence/sql-connect/production-sql-diff.txt) y se conservaron los siete IDs de cursos. El proveedor usa PostgreSQL18 frente a17 del enunciado; la usuaria aceptó esa diferencia sin cambiar de plan.
+- Auth: la [primera consulta](docs/evidence/sql-connect/production-auth-status.json) devolvió CONFIGURATION_NOT_FOUND. Tras nueva captura del proveedor Habilitada, [la configuración pública del SDK ya responde200](docs/evidence/sql-connect/auth-sdk-ready.json) para el proyecto correcto. Flujo completo verificado en Chromium en preview; publicación live en curso.
 
-Los headers HTTP capturados muestran:
+## Entrega pendiente
 
-- HSTS agregado por Firebase: `max-age=31556926; includeSubDomains; preload`.
-- Ausentes: CSP, X-Content-Type-Options, X-Frame-Options, Referrer-Policy y Permissions-Policy.
-- `Cache-Control: max-age=3600` tanto en HTML como en el asset inspeccionado, sin `immutable`.
-
-La [captura manual de la salida completa del script B1](docs/evidence/b1-manual-output.md)
-ya muestra `/` con status 200, los headers iniciales, el caché del HTML y del asset, y
-`❌ 6 control(es) pendiente(s).` Son controles esperables en la base antes del hardening,
-no una regresión de build o tests. La captura no muestra el código de salida del proceso.
-
-El intento **automático anterior**, conservado por separado, terminó con exit 1 por
-`TypeError: fetch failed` (`ETIMEDOUT`/`ENETUNREACH`) después de imprimir solo la URL del
-HTML. No llegó al resumen de controles; este fallo de conexión ya no bloquea la salida B1.
-El intento automático de SecurityHeaders respondió HTTP 403, sin calificación. Por separado,
-la [captura manual del reporte](docs/evidence/b1-securityheaders-manual.md) muestra **D** para
-<https://practica-cicd-micela.web.app/> (08 Nov 2026 16:23:08 UTC): HSTS presente y CSP,
-X-Frame-Options, X-Content-Type-Options, Referrer-Policy y Permissions-Policy ausentes.
-Esto completa B1 sin afirmar que el escaneo automático haya funcionado ni que la base esté
-endurecida. La usuaria confirmó después filtro e imagen en preview; no es una
-comprobación interactiva del agente.
-
-Evidencias conservadas:
-
-- [Despliegue, incidente corregido y límites](docs/evidence/baseline-deployment.md).
-- [Salida manual del script B1 y captura original](docs/evidence/b1-manual-output.md).
-- [Identidad, headers, rutas y fallo histórico del intento automático](docs/evidence/b1-headers.json).
-  Para publicar este JSON solo se sustituyó el prefijo absoluto local del proyecto en
-  `stderr` por `<PROJECT_ROOT>`; el original sin redacción se conserva privadamente.
-  Mediciones, `stdout`, `exitCode`, marcas temporales y demás campos no cambiaron.
-- [Respuesta automática histórica de SecurityHeaders: HTTP 403 sin calificación](docs/evidence/b1-securityheaders.json).
-- [Reporte manual de SecurityHeaders: D y captura](docs/evidence/b1-securityheaders-manual.md).
-- [Capturas manuales de versión: preview de cierre y base en producción](docs/evidence/manual-version-verification.md).
-
-### B5: medición de producción y reporte manual tras los merges
-
-El [registro B5 y su JSON crudo](docs/evidence/b5-production.md) documentan script público
-exit 0 (HTML 200, seis headers presentes, HTML `no-cache`, JS anual `immutable`) a
-`2026-11-08T23:24:42.774Z`. El colector terminó exit 2 por un fetch **separado** de
-identidad (`ETIMEDOUT`); `identity.verified=false`, `httpVerificationComplete=false` y
-`securityHeadersGrade=null`. `c3051dc` era el commit esperado en ese JSON, **no** el footer
-leído automáticamente. La [captura manual B5](docs/evidence/b5-manual-verification.md)
-muestra URL live y footer `c3051dc`/`main`, legibles pese al corte inferior; no sustituye
-el fetch automático fallido. La [nueva captura original del reporte SecurityHeaders](docs/evidence/Captura%20de%20pantalla%202026-11-08%20210426.png)
-muestra `https://practica-cicd-micela.web.app/`, **A** a 09 Nov 2026 00:04:18 UTC e
-indicadores verdes de CSP y los cinco headers básicos; el aviso indica nota limitada a A,
-pero no se ven las advertencias. La comparación manual es **D** (08 Nov 2026 16:23:08 UTC)
-→ **A**; el HTTP 403 del scanner corresponde solo a B1. La nota en el JSON B5 sigue
-`null`: no se cambian los resultados automáticos con evidencias manuales. Se probó el
-filtro y la imagen en producción. Después se hizo rollback a `bc9898b` y se restauró la
-versión endurecida `c3051dc`; los IDs constan en la evidencia B5.
-
-### Seguimiento de la usuaria
-
-- [x] Login y vinculación de GitHub; nombre exacto del secreto confirmado.
-- [x] Publicación autorizada de la base sin hardening y comprobación de identidad pública.
-- [x] Salida íntegra de `check-headers.mjs` en la captura aportada por la usuaria.
-- [x] B1: salida manual del script y captura de SecurityHeaders con calificación D
-  sobre la base sin hardening. Ese era el estado inicial; el hardening se desplegó
-  después de integrar ambos PR.
-- [x] Cadena entregada inicialmente como PR de preview (etapa anterior):
-  [PR #2 de fuente](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/2)
-  `feat/firebase-cicd` → `main` (`3f6b763fa7d92d94823bd2be41fded8cc8825fe3`,
-  342 líneas) y [PR #3 de evidencia](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/3)
-  `docs/firebase-b1-evidence` → `feat/firebase-cicd`
-  (commit documental anterior `5404476`, cierre comprobado `b6639e2`). Ambos enlazan sin cerrar
-  la [issue aprobada #1](https://github.com/micaelahryhorezuk/practica-firebase-cicd/issues/1),
-  todavía abierta. El commit de evidencia contiene la documentación de T6–T8b.
-- [x] CI de fuente SUCCESS (run 42503835084), evidencia anterior SUCCESS
-  (run 42503853409) y cierre `b6639e2` SUCCESS (run 42505029051).
-- [x] Identidad manual del cierre: las [capturas de `/cursos`](docs/evidence/manual-version-verification.md)
-  muestran `b6639e2` en preview de evidencia y `bc9898b` en producción. La última
-  consulta HTTP automática falló por conexión; no se presenta como éxito.
-- [x] Comentarios del bot y URLs de preview verificados:
-  [fuente](https://practica-cicd-micela--pr2-feat-firebase-cicd-zjdzsiyo.web.app) y
-  [evidencia](https://practica-cicd-micela--pr3-docs-firebase-b1-evi-eftmpc87.web.app).
-  Ambos: HTTP 200, SHA/rama correctos y `check-headers.mjs` exit 0, todos los controles.
-  HSTS lo agrega Firebase, HTML usa `no-cache` y JS caché anual `immutable`.
-  Esto no es una comprobación interactiva de navegador ni la medición B5 de producción.
-- [x] PR #2 y luego PR #3 integrados normalmente en `main` con S9; runs 42534289830 y
-  42534675406 SUCCESS, incluido `Deploy al canal live` en ambos. Sin bypass ni rollback.
-- [x] Filtro e imagen confirmados por la usuaria en preview y probados en producción tras
-  restaurar live: filtro `intermedio` mostró 2 de 6 cursos e imagen cargó a 960×320
-  ([evidencia B5](docs/evidence/b5-manual-verification.md)).
-- [x] B5: salida real del script público registrada con exit 0 en
-  [evidencia local](docs/evidence/b5-production.md); no es calificación ni identidad live.
-- [x] B5: captura manual del footer live `c3051dc`/`main` junto a la URL; el fallo
-  automático de identidad por `ETIMEDOUT` se conserva por separado.
-- [x] B5: reporte nuevo manual de SecurityHeaders para la URL live: **A** a
-  09 Nov 2026 00:04:18 UTC, frente a B1 **D**; JSON automático sin cambio.
-- [x] Rollback de producción a la versión base `bc9898b`, verificado por HTTP, y restauración
-  posterior de la versión endurecida `c3051dc`; ver IDs y versiones en la evidencia B5.
-
-Las capturas históricas no prueban identidad B5: una captura manual nueva confirma el
-footer y otra distinta el reporte A. La prueba interactiva de producción y el rollback
-están documentados por separado de las capturas.
+- Repositorio existente: <https://github.com/micaelahryhorezuk/practica-firebase-cicd>.
+- PR de clase 2 mergeado: pendiente.
+- URL objetivo: <https://practica-cicd-micela.web.app>; inscripción de clase 2 todavía no verificada allí.
+- Habilitación de Auth, publicación del frontend y cierre de L7: [pasos de entrega](docs/CLASE2.md#producción-y-entrega-pendientes-l7).
