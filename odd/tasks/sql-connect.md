@@ -1,6 +1,6 @@
 # SQL Connect · clase 2
 Solución de clase 2 integrada con la clase 1; preparación local terminada.
-Despliegue en practica-cicd-micela autorizado sin activar facturación ni aceptar costos; push/PR/merge requieren autorización específica.
+Despliegue en practica-cicd-micela autorizado sin facturación/costos; consulta/push/PR de revisión en GitHub autorizados posteriormente. Merge y publicación live no autorizados.
 
 ## Specs
 S1. Usuario: «tengo que hacer Clase2_lunes_SQLConnect_Enunciado.pdf»; autorización: «prepara la solicion».
@@ -12,7 +12,8 @@ S6. «Respondelas en REFLEXION.md (breves y concretas)»; seis preguntas en la s
 
 S7. Autorización de la usuaria: «ah perfecto, si autorizo», en respuesta a «¿Autorizas desplegarla en Firebase, proyecto practica-cicd-micela, sin activar facturación ni aceptar costos?». Comprobar plan/elegibilidad y migración antes de mutar producción; no aceptar una operación destructiva ni costos.
 
-S8. Enunciado: «PostgreSQL 17». El proveedor creó POSTGRES_18 en la prueba gratuita gestionada; decisión de compatibilidad por la usuaria pendiente, sin recrear recursos ni cambiar plan.
+S8. Enunciado original: «PostgreSQL 17». El proveedor creó POSTGRES_18; la usuaria eligió «Mantener PostgreSQL 18 sin cambiar de plan», documentando esa diferencia sin recrear recursos.
+S9. La usuaria eligió «Autorizar consulta, push y PR; sin merge» para github.com/micaelahryhorezuk/practica-firebase-cicd, usando sesión gh y lectura de /home/micaelahryhorezuk/.config/gh/hosts.yml y config.yml sin mostrar credenciales. Se publicarán solo ramas/PR de revisión, sin merge ni publicación live.
 
 ## Tasks
 T1 [done] S1: integrar material provisto conservando proyecto/workflows; inline; commits: fcc1b7e, eba6a50, ba9bc97, 8c78edc.
@@ -24,8 +25,8 @@ T5 [done] S7: sesión y límite de costos comprobados; Spark sin facturación/cu
 T6 [done] S5/S7: configuración web por worker, deploy seguro por padre; RED de producción demo observado y corregido; 13 tests/tipos/build pasan; esquema/conector desplegados con exit0 bajo prueba gratuita. Risk: item 5 (entorno/despliegue); commit: rama feat/clase2-sql-connect-07-production.
 T7 [blocked: disposición humana ante prueba independiente ejecutable no disponible] S5/S7: backend comprobado (6 controles, RUNNABLE, sql:diff vacío, 7 IDs conservados); prueba independiente estructural correcta pero suite/tipos aislados no reproducidos. Navegador/PR/merge siguen pendientes; commit: rama feat/clase2-sql-connect-07-production.
 T8 [blocked: acción de la usuaria en Firebase Console] S7: inicializar Authentication básico y habilitar correo/contraseña; GET config devolvió404 CONFIGURATION_NOT_FOUND; no habilitar Identity Platform/Blaze como alternativa.
-T9 [blocked: autorización específica para GitHub] S5/S7: consultar y publicar ramas/PR en github.com/micaelahryhorezuk/practica-firebase-cicd usando su sesión autorizada; no merge sin prueba de preview y nueva autorización.
-T10 [blocked: decisión de compatibilidad de la usuaria] S8: aceptar PostgreSQL18 de la prueba gestionada o consultar a la cátedra antes de publicar.
+T9 [pending] S5/S7/S9: publicar ramas/PR de revisión en github.com/micaelahryhorezuk/practica-firebase-cicd usando sesión gh autorizada; rama default main y permiso ADMIN comprobados. Verificar issue de alcance y bases; no merge.
+T10 [done] S8: PostgreSQL18 de la prueba gratuita aceptado por la usuaria sin cambio de plan.
 
 ## Log
 L1. Solicitud original: «tengo que hacer Clase2_lunes_SQLConnect_Enunciado.pdf».
@@ -50,3 +51,10 @@ L18. Verificador independiente de este slice: exports de desarrollo idénticos a
 L19. Authentication no inicializado (404 CONFIGURATION_NOT_FOUND). Frontend sin publicar, sin reads/push/PR/merge en GitHub. Se requiere acción de la usuaria en Console y autorización de publicación; no se considera terminada la entrega completa.
 
 L20. Instancia RUNNABLE confirmada; sql:diff exit0, diffs vacíos, catálogo conserva los7IDs después de la provisión. Se registra production-instance-ready.json, production-sql-diff.txt y production-after-ready.json. Solo se quitó un espacio final del log copiado de deploy para git diff --check; el log crudo permanece en .local-cache. Fallo de formato corregido, sin alterar contenido semántico.
+
+L21. Decisiones exactas del formulario: «Ya lo habilité» (Correo/Contraseña), «Mantener PostgreSQL 18 sin cambiar de plan», «Autorizar consulta, push y PR; sin merge». La API admin/v2 de Auth todavía devuelve404; su adecuación para Auth básico Spark está en diagnóstico, sin asumir que el reporte humano es incorrecto ni habilitar GCIP.
+L22. GitHub autorizado: repositorio público micaelahryhorezuk/practica-firebase-cicd, default main, viewerPermission ADMIN. PR4 de finalización de clase1 ya está mergeado. Solo hay issue1 aprobado de clase1 y etiquetas status:approved/type:chore; comprobar alcance antes de usarlo en Clase2.
+
+L23. Diagnóstico Auth acotado: GET público usado por SDK /v1/projects con clave del proyecto devuelve400 CONFIGURATION_NOT_FOUND, además del404 admin/v2. Esto no se corrige activando GCIP: pedir confirmar proyecto exacto/estado de Console o captura; no más reintentos sin cambio humano de estado.
+L24. Main remota verificada en4b23c1bb87e2cd8b9e5e4742c0038a01e4b695ea; su árbol es idéntico a1e4f30e, de donde nacieron los slices. No hay contaminación de la diff inicial por la finalización de Clase1. Crear tracker draft desde main, con índice documental propio, y mantener hijos contra tracker/padre inmediato.
+L25. Revisión nativa del commit02b18b2: review-e650361302f8255b, tres lentes, aprobada y reconocida; autoridad consumida según native-approved-acknowledgement-completed. R2-001 en config:12 es informativo y no abre corrección. La limpieza de la vista interna quedó diferida por candidate-view-git-failure; no se forzó Git ni se inició otra revisión. Esta aprobación no sustituye la suite independiente no reproducida ni autoriza merge/live.
