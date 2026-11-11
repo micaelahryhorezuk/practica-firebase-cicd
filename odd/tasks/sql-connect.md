@@ -25,8 +25,9 @@ T5 [done] S7: sesión y límite de costos comprobados; Spark sin facturación/cu
 T6 [done] S5/S7: configuración web por worker, deploy seguro por padre; RED de producción demo observado y corregido; 13 tests/tipos/build pasan; esquema/conector desplegados con exit0 bajo prueba gratuita. Risk: item 5 (entorno/despliegue); commit: rama feat/clase2-sql-connect-07-production.
 T7 [blocked: disposición humana ante prueba independiente ejecutable no disponible] S5/S7: backend comprobado (6 controles, RUNNABLE, sql:diff vacío, 7 IDs conservados); prueba independiente estructural correcta pero suite/tipos aislados no reproducidos. Navegador/PR/merge siguen pendientes; commit: rama feat/clase2-sql-connect-07-production.
 T8 [blocked: confirmar proyecto/configuración en Console o aportar captura] S7: la usuaria informó habilitación; admin config devuelve404 y endpoint público SDK400 CONFIGURATION_NOT_FOUND. No repetir sin cambio humano de estado; no habilitar Identity Platform/Blaze.
-T9 [in_progress] S5/S7/S9: ramas publicadas; la usuaria autorizó «Crear y aprobar el issue de Clase 2», incluida aplicación status:approved, creación type:feature y referencias Refs sin cierre automático. Blank issues habilitados, ADMIN confirmado y búsqueda de duplicados SQL Connect abierta/cerrada vacía. Crear issue y PR draft; sin merge.
+T9 [done] S5/S7/S9: issue5 aprobado y confirmado; tracker draft6 y siete hijos draft7..13 confirmados con readback de body, tipo único, bases y rutas de diff. Refs#5 no cerrante; sin merge/live.
 T10 [done] S8: PostgreSQL18 de la prueba gratuita aceptado por la usuaria sin cambio de plan.
+T11 [done] S5/S7/S9: ocho runs CI/preview success para SHA exactos, metadatos de ocho PR confirmados; HTTP/headers/CSP/caché/footer del preview integrado pasan para9234403. No se reiniciaron runs ni se probó navegador.
 
 ## Log
 L1. Solicitud original: «tengo que hacer Clase2_lunes_SQLConnect_Enunciado.pdf».
@@ -66,3 +67,22 @@ L27. Push atómico exit0 a github.com/micaelahryhorezuk/practica-firebase-cicd: 
 L28. Autorización literal de la usuaria: «Crear y aprobar el issue de Clase 2», para el target GitHub ya confirmado, status:approved y type:feature, referencias Refs sin cierre automático ni merge. Metadata GraphQL: isBlankIssuesEnabled=true, hasIssuesEnabled=true, ADMIN, sin formularios de issue/plantilla PR; búsqueda completa «SQL Connect» en títulos open/closed: cero duplicados. Por límite superior de workspace, BODY_FILE privado se materializa dentro de .local-cache ignorada (directorio700, archivo600), no fuera del proyecto; se limpia tras la operación.
 
 L29. Issue5 creado una sola vez y confirmado mediante readback de título/body/labels: https://github.com/micaelahryhorezuk/practica-firebase-cicd/issues/5. status:approved aplicado por instrucción humana específica y actor ADMIN; type:feature creado y aplicado como único tipo. BODY_FILE/readback privados limpiados tras resultado confirmado. Referencias de todos los PR serán Refs#5, sin cierre automático.
+
+L30. Confirmados mediante readback: tracker https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/6 (main), hijos7..13 contra tracker/padre inmediato. Todos draft/OPEN, autoMerge nulo y tipo único type:feature. Diagramas completados con IDs reales. Presupuestos GitHub:41/1125/337/239/178/187/630/353 líneas; excesos de7(lock generado) y12(copia histórica/documentos) declarados, sin excepción de política inventada. Último hijo SHA9234403571a63f521fbf0723ce013d0c484c6564. CI aún no confirmada en este registro.
+
+L31. CI PR9 aprobada para SHA eba6a5008f23065c3def40717cfb1b90923a0214, run42933363041. Los demás runs siguen pendientes de sus eventos de finalización; no se infiere su estado ni se reinician. El preview de este hijo intermedio no es la aplicación integrada.
+
+L32. CI PR11 aprobada para SHA8c78edccf208c0525f0781a93f087f2771c934ab, run42933420614. Se conserva evidencia de previews intermedios sin presentarlos como aplicación integrada.
+
+L33. CI tracker PR6 aprobada para SHAbf1ff5e978ab2c5cffac612600405b2c636b393d, run42933311775. Tracker sigue draft/no-merge y su preview es solo la base documental, no la aplicación integrada.
+
+L34. CI PR12 aprobada para SHAab9cccc34ea674275c31847ab8de5a4b74e77a3b, run42933464175. La prueba de CSP en navegador sigue sin ejecutarse; no se confunde con el resultado de build/preview.
+
+L35. CI PR10 aprobada para SHAba9bc97aa7d5588d938848570b530444901eee55, run42933397760. No se declara comprobado el ciclo de efectos/cambio de cuenta en navegador.
+
+L36. CI PR8 aprobada para SHAa7f3bab495f0444fe52963d4de6ead01f67d3462, run42933348943. Evidencia local de auditoría antes/después conservada; no se ejecutó atacar contra producción.
+
+L37. CI PR7 aprobada para SHAfcc1b7e1069eb386744a42974fffb7617269c8a2/run42933329701, y PR13 para SHA9234403571a63f521fbf0723ce013d0c484c6564/run42933481239. Las ocho workflows de preview6..13 quedaron observadas success para sus SHA exactos. No ejecutan npm test: sí npm ci/typecheck/build/deploy. Preview integrado: https://practica-cicd-micela--pr13-feat-clase2-sql-conn-pigrmg72.web.app. No prueba interacción de navegador ni resuelve Auth.
+
+L38. Ocho PR conservan draft/OPEN y mismo head; CI observada publicada en sus bodies y readback confirmado. HTTP del preview13 exit0: seis headers, caché del asset immutable, /cursos200, connect-src exacto y footer9234403/rama07. No hay prueba de registro ni de interacción de navegador.
+L39. Se congela el candidato remoto9234403 para la revisión/manual pendiente. Notas/evidencias posteriores se guardan en commit documental local sin push por ahora; no cambian app/lib/dataconnect/scripts/tests/package/config/workflows. Auth aún requiere evidencia humana y la suite independiente limitada sigue declarada. Sin merge/live ni cierre del issue.

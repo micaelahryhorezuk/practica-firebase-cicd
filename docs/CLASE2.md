@@ -63,7 +63,7 @@ Evidencias: [preflight](evidence/sql-connect/production-preflight.json), [deploy
 
 1. Abrir [Authentication del proyecto](https://console.firebase.google.com/project/practica-cicd-micela/authentication/providers), pulsar Comenzar si aparece y habilitar Correo electrónico/contraseña en Firebase Authentication básico. La usuaria informó haberlo habilitado, pero la consulta pública que usa el SDK (`GET /v1/projects`) devolvió 400 `CONFIGURATION_NOT_FOUND` para la clave de este proyecto; la consulta administrativa también devolvió404. Comprobar que la pantalla corresponde exactamente a `practica-cicd-micela` y confirmar la configuración o aportar captura sin credenciales. No se harán más reintentos automáticos ni se habilitará Identity Platform/Blaze.
 2. La usuaria autorizó consulta, push y PR de revisión en GitHub, sin merge. Mantener el flujo de PR/preview de clase 1 y la cadena elegida; no hacer merge hasta comprobar registro, inscripción y baja en el preview. El alcance de Clase2 debe estar vinculado a un issue aprobado antes de abrir los PR.
-3. En navegador, revisar Network y consola para confirmar CSP y conexiones; comprobar también cambio de cuenta, filtro, imagen de portada e identidad del build. No hay prueba de navegador disponible en esta sesión.
+3. [HTTP del preview integrado](evidence/sql-connect/preview-http.json) y [headers/caché](evidence/sql-connect/preview-headers.txt) pasan: `/cursos` devuelve200, CSP contiene solo los tres orígenes de Firebase más self, y el footer identifica SHA9234403/rama07. Esto no ejecuta JavaScript ni prueba navegador. Falta revisar Network/consola, registro/inscripción/baja, cambio de cuenta, filtro e imagen; no hay runner de navegador disponible en esta sesión.
 4. Solo tras esa comprobación y autorización de merge, revisar <https://practica-cicd-micela.web.app>. No se ha desplegado el frontend de clase 2 en Hosting.
 5. La inspección `npx firebase dataconnect:sql:diff --project practica-cicd-micela --service catalogo --location us-east4` ya confirmó cero diferencias. Ante cambios futuros, revisar el SQL antes de migrar; no ejecutar operaciones destructivas ni aceptar costos como alternativa.
 
@@ -79,8 +79,9 @@ El SDK instalado de Data Connect construye sus URLs con `firebasedataconnect.goo
 
 ## Entregables
 
-- URL del repositorio con esta rama integrada: pendiente de publicación.
+- Código publicado para revisión: [rama integrada del último hijo](https://github.com/micaelahryhorezuk/practica-firebase-cicd/tree/feat/clase2-sql-connect-07-production). Aún no integrado a main.
 - Salidas reales antes/después de `npm run atacar`: [REFLEXION.md](../REFLEXION.md).
-- URL del PR de CSP mergeado: pendiente.
+- [Issue aprobado #5](https://github.com/micaelahryhorezuk/practica-firebase-cicd/issues/5), [tracker draft #6](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/6), hijos #7–#13. [CSP #12](https://github.com/micaelahryhorezuk/practica-firebase-cicd/pull/12) y los demás siguen sin merge; aprobación posterior necesaria.
+- [Ocho workflows CI/preview](evidence/sql-connect/ci-previews.json) aprobadas para sus SHA exactos. Ejecutan instalación, typecheck, build y deploy, no los 13 tests unitarios. [Preview integrado #13](https://practica-cicd-micela--pr13-feat-clase2-sql-conn-pigrmg72.web.app/cursos); no constituye prueba de navegador ni live.
 - URL de producción con inscripción: pendiente de L7.
 - Seis respuestas: [REFLEXION.md](../REFLEXION.md).
