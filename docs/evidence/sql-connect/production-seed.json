@@ -1,0 +1,38 @@
+{
+  "status": "success",
+  "result": {
+    "data": {
+      "curso_upsertMany": [
+        {
+          "id": "0b7c1a2e00014c3a9d5e000000000001"
+        },
+        {
+          "id": "0b7c1a2e00014c3a9d5e000000000002"
+        },
+        {
+          "id": "0b7c1a2e00014c3a9d5e000000000003"
+        },
+        {
+          "id": "0b7c1a2e00014c3a9d5e000000000004"
+        },
+        {
+          "id": "0b7c1a2e00014c3a9d5e000000000005"
+        },
+        {
+          "id": "0b7c1a2e00014c3a9d5e000000000006"
+        },
+        {
+          "id": "0b7c1a2e00014c3a9d5e000000000007"
+        }
+      ],
+      "alumno_upsertMany": [
+        {
+          "id": "seed-uid-ana"
+        },
+        {
+          "id": "seed-uid-bruno"
+        }
+      ]
+    }
+  }
+}

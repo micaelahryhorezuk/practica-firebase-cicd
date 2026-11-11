@@ -1,0 +1,31 @@
+{
+  "project": "practica-cicd-micela",
+  "emulators": false,
+  "checks": [
+    {
+      "name": "ListCursos público",
+      "courses": 7,
+      "passed": true
+    },
+    {
+      "name": "ListAlumnos rechazada sin token",
+      "passed": true
+    },
+    {
+      "name": "MisInscripciones rechazada sin token",
+      "passed": true
+    },
+    {
+      "name": "Inscribirme rechazada sin token",
+      "passed": true
+    },
+    {
+      "name": "DarmeDeBaja rechazada sin token",
+      "passed": true
+    },
+    {
+      "name": "Catálogo sin cambios tras rechazos",
+      "passed": true
+    }
+  ]
+}

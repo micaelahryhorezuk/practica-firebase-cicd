@@ -1,0 +1,7 @@
+{
+  "status": "success",
+  "result": {
+    "projectId": "practica-cicd-micela",
+    "diffs": []
+  }
+}
