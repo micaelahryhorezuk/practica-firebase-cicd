@@ -1,0 +1,15 @@
+{
+  "project": "practica-cicd-micela",
+  "billingEnabled": false,
+  "hasBillingAccount": false,
+  "instance": {
+    "name": "catalogo-fdc",
+    "state": "RUNNABLE",
+    "databaseVersion": "POSTGRES_18",
+    "region": "us-east4",
+    "tier": "db-f1-micro",
+    "labels": {
+      "firebase-data-connect": "ft"
+    }
+  }
+}

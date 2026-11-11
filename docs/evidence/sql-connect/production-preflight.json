@@ -1,0 +1,41 @@
+[
+  {
+    "name": "project",
+    "httpStatus": 200,
+    "data": {
+      "projectId": "practica-cicd-micela",
+      "projectNumber": "390346504572",
+      "state": "ACTIVE",
+      "hostingSite": "practica-cicd-micela"
+    }
+  },
+  {
+    "name": "billing",
+    "httpStatus": 200,
+    "data": {
+      "billingEnabled": false,
+      "hasBillingAccount": false
+    }
+  },
+  {
+    "name": "service",
+    "httpStatus": 403,
+    "data": {
+      "message": "Firebase SQL Connect API has not been used in project practica-cicd-micela before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/firebasedataconnect.googleapis.com/overview?project=practica-cicd-micela then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.",
+      "status": "PERMISSION_DENIED",
+      "details": [
+        {
+          "reason": "SERVICE_DISABLED",
+          "service": "firebasedataconnect.googleapis.com"
+        }
+      ]
+    }
+  },
+  {
+    "name": "instance",
+    "httpStatus": 404,
+    "data": {
+      "message": "The Cloud SQL instance does not exist."
+    }
+  }
+]
